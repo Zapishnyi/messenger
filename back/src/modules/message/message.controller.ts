@@ -34,8 +34,8 @@ import { FilesResDto } from './dto/res/files.res.dto';
 import { MessageResDto } from './dto/res/message.res.dto';
 import { FileService } from './services/file.service';
 import { FilesOutputPresenterService } from './services/files-output-presenter.service';
-import { MessageService } from './services/message.service';
 import { MessagePresenterService } from './services/message-presenter.service';
+import { MessageService } from './services/message.service';
 
 @ApiTags('3.Massages')
 @Controller('/message')
@@ -143,7 +143,6 @@ export class MessageController {
   @ApiBearerAuth('Access-Token')
   @FileLimitation('file', 1024 * 1000)
   @ApiConsumes('multipart/form-data')
-  // @ApiFile('file', true, false, '1MB')
   @ApiBody({
     schema: {
       type: 'object',
