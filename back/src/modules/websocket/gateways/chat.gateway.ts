@@ -1,0 +1,128 @@
+import {
+  Injectable,
+  Logger,
+  UseFilters,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import {
+  MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  OnGatewayInit,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+  WsException,
+} from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
+import { EntityManager, In } from 'typeorm';
+
+import { GlobalWSExceptionFilter } from '../../../common/filters/global-ws-exemption.filter';
+import { JwtWSConnectGuard } from '../../../common/guards/jwt-ws-access-connect-guard';
+import { AppConfigType } from '../../../configs/envConfigType';
+import { FileEntity } from '../../../database/entities/file.entity';
+import { MessageEntity } from '../../../database/entities/message.entity';
+import { MessageDto } from '../dto/ws-message.dto';
+
+@Injectable()
+@WebSocketGateway({
+  cors: {
+    origin: '*', // Allow all origins (adjust this for production)
+    methods: ['GET', 'POST'],
+  },
+}) // Will use dynamic port from config
+export class ChatGateWay
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
+  private readonly port: number;
+
+  @WebSocketServer()
+  server: Server;
+
+  private onlineUsers = new Map<string, string>(); // socketId -> userId mapping
+  private onlineUsersReversed = new Map<string, string>(); //  userId -> socketId mapping
+
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly entityManager: EntityManager,
+    private readonly jwtWSConnectGuard: JwtWSConnectGuard,
+  ) {
+    this.port = this.configService.get<AppConfigType>('app')!.ws_port;
+  }
+
+  afterInit() {
+    Logger.log(`WebSocket server initialized on port ${this.port}`);
+  }
+
+  private emitOnlineUsers() {
+    const onlineUserIds = Array.from(this.onlineUsers.values());
+    this.server.emit('online-users', onlineUserIds);
+  }
+  async handleConnection(client: Socket) {
+    const user_id = await this.jwtWSConnectGuard.check(client);
+
+    if (user_id) {
+      this.onlineUsers.set(client.id, user_id);
+      this.onlineUsersReversed.set(user_id, client.id);
+      this.emitOnlineUsers();
+    } else {
+      client.emit('error', {
+        message: `status: 401 | messages:  Unauthorized`,
+      });
+      process.nextTick(() => client.disconnect());
+      return;
+    }
+    // Logger.log(`User ${user_id} connected (Socket: ${client.id})`);
+  }
+
+  async handleDisconnect(client: Socket) {
+    const user_id = this.onlineUsers.get(client.id);
+    if (user_id) {
+      this.onlineUsers.delete(client.id);
+      this.onlineUsersReversed.delete(user_id);
+      this.emitOnlineUsers();
+    }
+    // Logger.log(`User ${user_id} disconnected (Socket: ${client.id})`);
+  }
+
+  @UsePipes(
+    new ValidationPipe({
+      exceptionFactory: (errors) => new WsException(errors),
+    }),
+  )
+  @SubscribeMessage('send_message')
+  @UseFilters(new GlobalWSExceptionFilter())
+  async handleMessage(@MessageBody() message: MessageDto) {
+    const message_id = await this.entityManager.transaction(
+      async (em: EntityManager): Promise<string> => {
+        const messageRepositoryEM = em.getRepository(MessageEntity);
+        const fileRepositoryEM = em.getRepository(FileEntity);
+        let files: FileEntity[] | null = null;
+        if (message?.files?.length) {
+          const fileIds = message.files.map((file) => file.file_id);
+          files = await fileRepositoryEM.findBy({
+            id: In(fileIds),
+          });
+        }
+        const messageSaved = messageRepositoryEM.create({
+          content: message.content,
+          sender_id: message.sender_id,
+          receiver_id: message.receiver_id,
+          files: files ? files : [],
+        });
+        return (await messageRepositoryEM.save(messageSaved)).id;
+      },
+    );
+
+    const receiverSocketId = this.onlineUsersReversed.get(message.receiver_id);
+    const senderSocketId = this.onlineUsersReversed.get(message.sender_id);
+    if (receiverSocketId && senderSocketId) {
+      const messageWithId = { ...message, id: message_id };
+      this.server.to(receiverSocketId).emit('receive_message', messageWithId);
+      this.server.to(senderSocketId).emit('receive_message', messageWithId);
+    }
+    return message;
+  }
+}
