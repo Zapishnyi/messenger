@@ -66,7 +66,7 @@ const ChatInput: FC<IProps> = ({ socket }) => {
             files: filesStore,
             created: new Date().toString(),
           };
-
+ 
           socket.emit("send_message", messageData);
           if (textInputRef.current) textInputRef.current.value = "";
           setSelectedFiles([]);

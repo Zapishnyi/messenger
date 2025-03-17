@@ -18,7 +18,7 @@ Developed as per technical assignment
 
    > npm i
 
-   back: will be installed automatically during build
+   back: Dependencies will be installed automatically during building back application
 
 4. Build up Docker container for Nest application:
 

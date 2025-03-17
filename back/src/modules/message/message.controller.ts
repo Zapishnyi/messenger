@@ -34,8 +34,8 @@ import { FilesResDto } from './dto/res/files.res.dto';
 import { MessageResDto } from './dto/res/message.res.dto';
 import { FileService } from './services/file.service';
 import { FilesOutputPresenterService } from './services/files-output-presenter.service';
-import { MessagePresenterService } from './services/message-presenter.service';
 import { MessageService } from './services/message.service';
+import { MessagePresenterService } from './services/message-presenter.service';
 
 @ApiTags('3.Massages')
 @Controller('/message')

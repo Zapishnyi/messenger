@@ -118,9 +118,11 @@ export class ChatGateWay
 
     const receiverSocketId = this.onlineUsersReversed.get(message.receiver_id);
     const senderSocketId = this.onlineUsersReversed.get(message.sender_id);
-    if (receiverSocketId && senderSocketId) {
-      const messageWithId = { ...message, id: message_id };
+    const messageWithId = { ...message, id: message_id };
+    if (receiverSocketId) {
       this.server.to(receiverSocketId).emit('receive_message', messageWithId);
+    }
+    if (senderSocketId) {
       this.server.to(senderSocketId).emit('receive_message', messageWithId);
     }
     return message;
