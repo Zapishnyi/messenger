@@ -27,7 +27,7 @@ const UserLogged: FC<IProps> = ({ nick_name }) => {
   return (
     <div
       className={
-        "h-[100%] w-[250px] flex flex-col justify-between items-center cursor-pointer px-[2px]"
+        "h-[100%] w-fit flex  justify-center items-center cursor-pointer gap-[5px] px-[15px]"
       }
       onClick={clickHandle}
       onMouseEnter={() => {
@@ -40,11 +40,13 @@ const UserLogged: FC<IProps> = ({ nick_name }) => {
       {!!nick_name && (
         <>
           <SvgUser />
-          <div className={"h-[50px] relative "}>
-            {!hover ? <p>{`${nick_name}`}</p> : <p>{"Log out"}</p>}
+          <div className={"h-full relative flex justify-center items-center "}>
+            <p>{`${nick_name}`}</p> 
+            {hover && <p className="absolute top-1/2 left-[-100px] -translate-y-1/2 ">Log out</p>}
           </div>
         </>
       )}
+      
     </div>
   );
 };
