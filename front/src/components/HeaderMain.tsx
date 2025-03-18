@@ -25,7 +25,7 @@ const HeaderMain = () => {
   }, []);
 
   return (
-    <header className="w-full h-[50px] grow-0 bg-[#d4d4d433] flex justify-end align-middle ">
+    <header className="w-full h-[50px] grow-0 bg-[#e8e8e8] flex justify-end align-middle ">
       <UserLogged nick_name={userLogged?.nick_name || ""} />
     </header>
   );
