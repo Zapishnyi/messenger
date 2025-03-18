@@ -24,6 +24,9 @@ import { JwtWSConnectGuard } from '../../../common/guards/jwt-ws-access-connect-
 import { AppConfigType } from '../../../configs/envConfigType';
 import { FileEntity } from '../../../database/entities/file.entity';
 import { MessageEntity } from '../../../database/entities/message.entity';
+import { MessageEditReqDto } from '../../message/dto/req/message-edit.req.dto';
+import { MessageService } from '../../message/services/message.service';
+import { MessageEditDto } from '../dto/ws-message-edit.dto';
 import { MessageDto } from '../dto/ws-message.dto';
 
 @Injectable()
@@ -48,6 +51,7 @@ export class ChatGateWay
     private readonly configService: ConfigService,
     private readonly entityManager: EntityManager,
     private readonly jwtWSConnectGuard: JwtWSConnectGuard,
+    private readonly messageService: MessageService,
   ) {
     this.port = this.configService.get<AppConfigType>('app')!.ws_port;
   }
@@ -125,6 +129,60 @@ export class ChatGateWay
     if (senderSocketId) {
       this.server.to(senderSocketId).emit('receive_message', messageWithId);
     }
+    return message;
+  }
+
+  @UsePipes(
+    new ValidationPipe({
+      exceptionFactory: (errors) => new WsException(errors),
+    }),
+  )
+  @SubscribeMessage('delete_message')
+  @UseFilters(new GlobalWSExceptionFilter())
+  async handleDeleteMessage(@MessageBody() message: MessageEditDto) {
+    await this.entityManager.transaction(
+      async (em: EntityManager): Promise<void> => {
+        const messageRepositoryEM = em.getRepository(MessageEntity);
+        messageRepositoryEM.delete({ id: message.id });
+      },
+    );
+    const receiverSocketId = this.onlineUsersReversed.get(message.receiver_id);
+    const senderSocketId = this.onlineUsersReversed.get(message.sender_id);
+
+    if (receiverSocketId) {
+      this.server.to(receiverSocketId).emit('message_deleted', message);
+    }
+    if (senderSocketId) {
+      this.server.to(senderSocketId).emit('message_deleted', message);
+    }
+
+    return message;
+  }
+
+  @UsePipes(
+    new ValidationPipe({
+      exceptionFactory: (errors) => new WsException(errors),
+    }),
+  )
+  @SubscribeMessage('edit_message')
+  @UseFilters(new GlobalWSExceptionFilter())
+  async handleEditMessage(@MessageBody() message: MessageEditReqDto) {
+    const messageEdited = await this.messageService.editMessage(message);
+
+    const receiverSocketId = this.onlineUsersReversed.get(
+      messageEdited.receiver_id,
+    );
+    const senderSocketId = this.onlineUsersReversed.get(
+      messageEdited.sender_id,
+    );
+
+    if (receiverSocketId) {
+      this.server.to(receiverSocketId).emit('message_edited', message);
+    }
+    if (senderSocketId) {
+      this.server.to(senderSocketId).emit('message_edited', message);
+    }
+
     return message;
   }
 }

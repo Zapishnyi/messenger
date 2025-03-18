@@ -1,14 +1,16 @@
 import { FC } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
-
 import ErrorsContainer from "../components/ErrorsContainer/ErrorsContainer";
+
 
 const ErrorPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+ 
 
   const errors = location.state;
+   console.log(errors)w
   const clickHandle = () => {
     navigate("/chat");
   };

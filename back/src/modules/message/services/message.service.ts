@@ -33,17 +33,18 @@ export class MessageService {
     );
   }
 
-  public async editMessage(
-    message_id: string,
-    { content, filesToDelete }: MessageEditReqDto,
-  ): Promise<MessageEntity> {
+  public async editMessage({
+    id,
+    content,
+    filesToDelete,
+  }: MessageEditReqDto): Promise<MessageEntity> {
     return await this.entityManager.transaction(
       this.isolationLevel.set(),
       async (em: EntityManager) => {
         const messageRepositoryEM = em.getRepository(MessageEntity);
         const fileRepositoryEM = em.getRepository(FileEntity);
         if (content) {
-          messageRepositoryEM.update({ id: message_id }, { content });
+          messageRepositoryEM.update({ id }, { content });
         }
         if (filesToDelete?.length) {
           filesToDelete.forEach(async (file) => {
@@ -52,7 +53,7 @@ export class MessageService {
         }
         const messageUpdated = await messageRepositoryEM.findOne({
           where: {
-            id: message_id,
+            id,
           },
           relations: ['files'],
         });

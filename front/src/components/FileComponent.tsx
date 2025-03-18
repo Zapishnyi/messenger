@@ -1,4 +1,5 @@
 import { FC, useRef } from "react";
+import { Socket } from "socket.io-client";
 import { errorHandle } from "../helpers/error-handle";
 import IFile from "../interfaces/IFile";
 import IMessage from "../interfaces/IMessage";
@@ -10,8 +11,9 @@ interface IProps {
   isOwned: boolean;
   fileData: IFile;
   message: IMessage;
+  socket: Socket | null;
 }
-const FileComponent: FC<IProps> = ({ fileData, isOwned, message }) => {
+const FileComponent: FC<IProps> = ({ fileData, isOwned, message ,socket}) => {
   const downloadLinkRef = useRef<HTMLAnchorElement>(null);
   const { messageOnEdit } = useAppSelector((state) => state.messages);
   const fileDownloadHandle = async () => {
@@ -47,6 +49,7 @@ const FileComponent: FC<IProps> = ({ fileData, isOwned, message }) => {
         <Instruments
           edit={false}
           message={message}
+          socket={socket}
           file_id={fileData.file_id}
         />
       )}

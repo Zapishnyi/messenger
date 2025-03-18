@@ -9,11 +9,12 @@ import { storage } from "../services/localStorage.service";
 const Chat: FC = () => {
   const socket = useSocket(storage.getAccessToken() || null);
   const dispatch = useAppDispatch();
+  
   const { users_online } = useAppSelector((state) => state.online);
   const { users, userLogged, contactChosen, usersLoadingState } =
     useAppSelector((state) => state.users);
   useEffect(() => {
-    dispatch(UsersActions.getAllUsers());
+    dispatch(UsersActions.getAllUsers())
   }, [users_online]);
   return (
     <div className="w-full h-full flex overflow-hidden ">

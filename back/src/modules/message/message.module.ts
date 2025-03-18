@@ -18,5 +18,6 @@ import { MessageService } from './services/message.service';
     FileService,
     FilesOutputPresenterService,
   ],
+  exports: [MessageService],
 })
 export class MessageModule {}

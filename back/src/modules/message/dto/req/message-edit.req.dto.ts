@@ -11,6 +11,11 @@ import {
 import { TransformHelper } from '../../../../common/helpers/transform.helper';
 
 export class MessageEditReqDto {
+  @IsUUID()
+  @IsNotEmpty()
+  @IsString()
+  id: string;
+
   @IsOptional()
   @IsString()
   @Transform(TransformHelper.trim)

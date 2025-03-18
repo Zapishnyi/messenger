@@ -48,8 +48,8 @@ export const useSocket = (token: string | null): Socket | null => {
       dispatch(OnlineActions.setUsersOnline(users));
     });
 
-    newSocket.on("error", (error: string) => {
-      navigateTo("/error", { state: [error] });
+    newSocket.on("error", (error: {message:string}) => {
+      navigateTo("/error", { state: [error.message] });
     });
 
     newSocket.on("receive_message", (message: IMessage) => {
@@ -61,9 +61,29 @@ export const useSocket = (token: string | null): Socket | null => {
      }
     });
 
+      newSocket.on("message_edited", (message: IMessage) => {
+       
+      if (contactChosenRef.current?.id === message.sender_id || userLoggedRef?.current?.id === message.sender_id) {
+              dispatch(MessageActions.editMessage(message));
+      }
+     
+    });
+
+  
+    newSocket.on("message_deleted", (message: IMessage) => {
+      
+      if (contactChosenRef.current?.id === message.sender_id || userLoggedRef?.current?.id === message.sender_id) {
+              dispatch(MessageActions.deleteMessage(message.id));
+      }
+      if (contactChosenRef.current?.id !== message.sender_id) {
+       dispatch(MessageActions.filterUnreadMessages(message.id));
+     }
+    });
+
     return () => {
       newSocket.disconnect();
     };
+
   }, [token]);
 
   return socket;

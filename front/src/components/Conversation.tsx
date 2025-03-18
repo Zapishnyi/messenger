@@ -19,7 +19,7 @@ const Conversation: FC<IProps> = ({ socket, user_id }) => {
     <>
       {!!contactChosen && (
         <div className="grow-1 h-full flex flex-col overflow-hidden">
-          <ChatFrame />
+          <ChatFrame socket={socket} />
           <ChatInput socket={socket} />
         </div>
       )}

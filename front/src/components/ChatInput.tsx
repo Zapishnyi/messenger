@@ -33,14 +33,10 @@ const ChatInput: FC<IProps> = ({ socket }) => {
   }, [messageOnEdit]);
   const sendMessageHandle = async () => {
     if (messageOnEdit) {
-      dispatch(
-        MessageActions.editMessage({
-          content: textInputRef.current?.value || "",
+    socket?.emit("edit_message",{ content: textInputRef.current?.value || "",
           filesToDelete,
-          id: messageOnEdit.id,
-        })
-      );
-      if (textInputRef.current) textInputRef.current.value = "";
+         id: messageOnEdit.id,})
+       if (textInputRef.current) textInputRef.current.value = "";
     } else {
       try {
         let filesStore: IFile[] = [];

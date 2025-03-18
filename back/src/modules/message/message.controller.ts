@@ -1,16 +1,14 @@
 import {
-  Body,
   Controller,
   Delete,
   Get,
   NotFoundException,
   Param,
   ParseUUIDPipe,
-  Patch,
   Post,
   StreamableFile,
   UploadedFiles,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -29,7 +27,6 @@ import { FileOwnershipGuard } from '../../common/guards/file-ownership.guard';
 import { JwtAccessGuard } from '../../common/guards/jwt-access.guard';
 import { MessageOwnershipGuard } from '../../common/guards/message-ownership.guard';
 import { IUserData } from '../auth/interfaces/IUserData';
-import { MessageEditReqDto } from './dto/req/message-edit.req.dto';
 import { FilesResDto } from './dto/res/files.res.dto';
 import { MessageResDto } from './dto/res/message.res.dto';
 import { FileService } from './services/file.service';
@@ -71,30 +68,30 @@ export class MessageController {
       (e) => this.messagePresenter.toResponseDtoFromEntity(e),
     );
   }
-  // Edit message ----------------------------------------------
-  @ApiOperation({
-    summary: "Edit logged user's message by message ID.",
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Unauthorized',
-    example: {
-      statusCode: 401,
-      messages: 'jwt expired',
-      timestamp: '2024-12-03T18:52:08.622Z',
-      path: '/message/:id',
-    },
-  })
-  @UseGuards(JwtAccessGuard, MessageOwnershipGuard)
-  @ApiBearerAuth('Access-Token')
-  @Patch(':id')
-  public async editMessage(
-    @Param('id', ParseUUIDPipe) message_id: string,
-    @Body() dto: MessageEditReqDto,
-  ): Promise<MessageResDto> {
-    return this.messagePresenter.toResponseDtoFromEntity(
-      await this.messageService.editMessage(message_id, dto),
-    );
-  }
+  // // Edit message ----------------------------------------------
+  // @ApiOperation({
+  //   summary: "Edit logged user's message by message ID.",
+  // })
+  // @ApiUnauthorizedResponse({
+  //   description: 'Unauthorized',
+  //   example: {
+  //     statusCode: 401,
+  //     messages: 'jwt expired',
+  //     timestamp: '2024-12-03T18:52:08.622Z',
+  //     path: '/message/:id',
+  //   },
+  // })
+  // @UseGuards(JwtAccessGuard, MessageOwnershipGuard)
+  // @ApiBearerAuth('Access-Token')
+  // @Patch(':id')
+  // public async editMessage(
+  //   @Param('id', ParseUUIDPipe) message_id: string,
+  //   @Body() dto: MessageEditReqDto,
+  // ): Promise<MessageResDto> {
+  //   return this.messagePresenter.toResponseDtoFromEntity(
+  //     await this.messageService.editMessage(message_id, dto),
+  //   );
+  // }
 
   @ApiOperation({
     summary: "Delete logged user's message by message ID .",

@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { MessageActions } from "../redux/Slices/messageSlice";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 
+import { Socket } from "socket.io-client";
 import IMessage from "../interfaces/IMessage";
 import { SvgChecked } from "./SvgChecked";
 import SvgDelete from "./SvgDelete";
@@ -9,9 +10,10 @@ import { SvgEditPen } from "./SvgEditPen";
 interface IProps {
   edit: boolean;
   message: IMessage;
+  socket: Socket | null;
   file_id?: string;
 }
-const Instruments: FC<IProps> = ({ edit, message, file_id }) => {
+const Instruments: FC<IProps> = ({ edit, message, file_id , socket}) => {
   const { messageOnEdit } = useAppSelector((state) => state.messages);
   const [checked, setChecked] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -20,7 +22,8 @@ const Instruments: FC<IProps> = ({ edit, message, file_id }) => {
       setChecked(true);
       if (file_id) dispatch(MessageActions.addFileToDelete(file_id));
     } else {
-      dispatch(MessageActions.deleteMessage(message.id));
+       socket?.emit("delete_message", message);
+      // dispatch(MessageActions.deleteMessage(message.id));
     }
   };
   const editHandle = () => {

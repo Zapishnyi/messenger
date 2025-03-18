@@ -62,20 +62,7 @@ const editMessage = createAsyncThunk(
   }
 );
 
-const deleteMessage = createAsyncThunk(
-  "messages/deleteMessage",
-  async (id: string, thunkAPI) => {
-    try {
-      await api.message.delete(id);
-      return thunkAPI.fulfillWithValue(id);
-    } catch (e) {
-      const error = errorHandle(e);
-      return thunkAPI.rejectWithValue(error.message);
-    } finally {
-      thunkAPI.dispatch(MessageActions.setLoadingState(false));
-    }
-  }
-);
+
 
 export const messageSlice = createSlice({
   name: "messages",
@@ -97,6 +84,19 @@ export const messageSlice = createSlice({
     addUnreadMessage: (state, action: PayloadAction<IMessage>) => {
       state.unreadMessages = [...state.unreadMessages, action.payload];
     },
+    deleteMessage: (state, action: PayloadAction<string>) => {
+      state.messages = [...state.messages].filter(
+          (m) => m.id !== action.payload
+      );
+      
+    },
+    editMessage: (state, action: PayloadAction<IMessage>) => {
+      state.messages = [...state.messages].map(
+          (m) => m.id === action.payload.id?action.payload:m
+      );
+      
+    },
+   
     filterUnreadMessages: (state, action: PayloadAction<string>) => {
       state.unreadMessages = state.unreadMessages.filter(
         (m) => m.sender_id !== action.payload
@@ -116,13 +116,8 @@ export const messageSlice = createSlice({
           m.id === action.payload.id ? action.payload : m
         );
       })
-      .addCase(deleteMessage.fulfilled, (state, action) => {
-        state.messages = [...state.messages].filter(
-          (m) => m.id !== action.payload
-        );
-      })
-      .addMatcher(
-        isRejected(getMessages, editMessage, deleteMessage),
+          .addMatcher(
+        isRejected(getMessages, editMessage),
         (state, action) => {
           console.error(
             "Messages receive sequence failed with error:",
@@ -131,7 +126,7 @@ export const messageSlice = createSlice({
         }
       )
       .addMatcher(
-        isPending(getMessages, editMessage, deleteMessage),
+        isPending(getMessages, editMessage),
         (state) => {
           state.loadingState = true;
         }
@@ -143,5 +138,5 @@ export const MessageActions = {
   ...messageSlice.actions,
   getMessages,
   editMessage,
-  deleteMessage,
+ 
 };
