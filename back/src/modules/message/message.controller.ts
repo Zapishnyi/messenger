@@ -7,7 +7,7 @@ import {
   Post,
   StreamableFile,
   UploadedFiles,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,

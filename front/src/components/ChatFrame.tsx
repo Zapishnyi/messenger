@@ -9,7 +9,7 @@ interface IProps {
 }
 const ChatFrame: FC<IProps> = ({socket}) => {
   const { messages } = useAppSelector((state) => state.messages);
-console.log('messages',messages.length)
+
   const chatFrameRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (chatFrameRef.current) {
