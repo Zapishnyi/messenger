@@ -16,7 +16,7 @@ const HeaderAuth = () => {
         onClick={() => {
           navigate("/auth/sign-up");
         }}
-        className={` flex cursor-pointer h-fit items-center p-[5px] px-[8px] border border-gray-300 rounded-md shadow-lg ${!isSignIn ? "shadow-[#8f638a]" : "shadow-[#838383]"} transition duration-[0.3s] hover:bg-gray-100`}
+        className={` flex cursor-pointer h-fit items-center p-[5px] px-[8px] border border-gray-300 rounded-md shadow-lg ${!isSignIn ? "shadow-[#8f638a]" : "shadow-[#dadada]"} transition duration-[0.3s] hover:bg-gray-100`}
       >
         Sing up
       </button>
@@ -24,7 +24,7 @@ const HeaderAuth = () => {
         onClick={() => {
           navigate("/auth/sign-in");
         }}
-        className={`flex  cursor-pointer h-fit items-center p-[5px] px-[8px] border border-gray-300 rounded-md shadow-lg ${isSignIn ? "shadow-[#8f638a]" : "shadow-[#838383]"} transition duration-[0.3s] hover:bg-gray-100 `}
+        className={`flex  cursor-pointer h-fit items-center p-[5px] px-[8px] border border-gray-300 rounded-md shadow-lg ${isSignIn ? "shadow-[#8f638a]" : "shadow-[#dadada]"} transition duration-[0.3s] hover:bg-gray-100 `}
       >
         Sing in
       </button>
