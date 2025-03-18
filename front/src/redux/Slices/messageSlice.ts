@@ -15,6 +15,7 @@ interface IInitial {
   messageOnEdit: IMessage | null;
   filesToDelete: string[];
   messages: IMessage[];
+  unreadMessages: IMessage[];
   loadingState: boolean;
 }
 
@@ -22,6 +23,7 @@ const initialState: IInitial = {
   messageOnEdit: null,
   filesToDelete: [],
   messages: [],
+  unreadMessages: [],
   loadingState: false,
 };
 const getMessages = createAsyncThunk(
@@ -91,6 +93,14 @@ export const messageSlice = createSlice({
     },
     addFileToDelete: (state, action: PayloadAction<string>) => {
       state.filesToDelete = [...state.filesToDelete, action.payload];
+    },
+    addUnreadMessage: (state, action: PayloadAction<IMessage>) => {
+      state.unreadMessages = [...state.unreadMessages, action.payload];
+    },
+    filterUnreadMessages: (state, action: PayloadAction<string>) => {
+      state.unreadMessages = state.unreadMessages.filter(
+        (m) => m.sender_id !== action.payload
+      )
     },
     clearFilesToDelete: (state) => {
       state.filesToDelete = [];

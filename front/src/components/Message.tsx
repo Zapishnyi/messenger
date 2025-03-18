@@ -10,6 +10,7 @@ const Message: FC<IProps> = memo(({ message }) => {
   const { userLogged, contactChosen } = useAppSelector((state) => state.users);
   const { messageOnEdit } = useAppSelector((state) => state.messages);
   const isOwned = message.sender_id === userLogged?.id;
+  const isEdited = message.id === messageOnEdit?.id;
   const [hover, setHover] = useState<boolean>(false);
 
   return (
@@ -26,7 +27,7 @@ const Message: FC<IProps> = memo(({ message }) => {
         }}
       >
         <p
-          className={`${isOwned ? "self-end bg-[#e4f9d5]" : "self-start bg-[#d5e1f9]"} w-fit min-w-[50px] p-[5px] rounded-md`}
+          className={`${isOwned ? `self-end ${isEdited ? "bg-[#f9d5d5]" :  "bg-[#e4f9d5]"}`: "self-start bg-[#d5e1f9]"} w-fit min-w-[50px] p-[5px] rounded-md`}
         >{`${isOwned ? "You: " : contactChosen?.nick_name + ": "}${message.content}`}</p>
         {hover && message.sender_id === userLogged?.id && !messageOnEdit && (
           <Instruments edit={true} message={message} />

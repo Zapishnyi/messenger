@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { navigateTo } from "../helpers/navigate-to";
 import IMessage from "../interfaces/IMessage";
+import IUser from "../interfaces/IUser";
 import { MessageActions } from "../redux/Slices/messageSlice";
 import { OnlineActions } from "../redux/Slices/onlineSlice";
 import { useAppDispatch, useAppSelector } from "../redux/store";
@@ -11,7 +12,17 @@ const WS_SERVER_URL = import.meta.env.VITE_WS_BASE_URL;
 export const useSocket = (token: string | null): Socket | null => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const dispatch = useAppDispatch();
-  const { messages } = useAppSelector((state) => state.messages);
+  const { contactChosen, userLogged } = useAppSelector((state) => state.users);
+
+  const contactChosenRef = useRef<IUser>(contactChosen);
+  const userLoggedRef = useRef<IUser>(userLogged);
+
+
+  useEffect(() => {
+    contactChosenRef.current = contactChosen;
+    userLoggedRef.current = userLogged;
+  }, [contactChosen, userLogged]);
+
 
   useEffect(() => {
     if (!token) return;
@@ -42,7 +53,12 @@ export const useSocket = (token: string | null): Socket | null => {
     });
 
     newSocket.on("receive_message", (message: IMessage) => {
-      dispatch(MessageActions.addMessage(message));
+      if (contactChosenRef.current?.id === message.sender_id || userLoggedRef?.current?.id === message.sender_id) {
+              dispatch(MessageActions.addMessage(message));
+      }
+      if (contactChosenRef.current?.id !== message.sender_id) {
+       dispatch(MessageActions.addUnreadMessage(message));
+     }
     });
 
     return () => {
