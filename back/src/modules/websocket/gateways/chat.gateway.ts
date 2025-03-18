@@ -177,10 +177,10 @@ export class ChatGateWay
     );
 
     if (receiverSocketId) {
-      this.server.to(receiverSocketId).emit('message_edited', message);
+      this.server.to(receiverSocketId).emit('message_edited', messageEdited);
     }
     if (senderSocketId) {
-      this.server.to(senderSocketId).emit('message_edited', message);
+      this.server.to(senderSocketId).emit('message_edited', messageEdited);
     }
 
     return message;

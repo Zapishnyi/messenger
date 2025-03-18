@@ -13,9 +13,7 @@ export const urls = {
   },
   message: {
     all: (id: string) => `/message/${id}`,
-    edit: (id: string) => `/message/${id}`,
-    delete: (id: string) => `/message/${id}`,
-    file_upload: "/message/files/upload",
+     file_upload: "/message/files/upload",
     file_download: (id: string) => `/message/file/${id}`,
   },
   health: "/health",

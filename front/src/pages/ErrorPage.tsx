@@ -10,7 +10,7 @@ const ErrorPage: FC = () => {
  
 
   const errors = location.state;
-   console.log(errors)w
+   console.log(errors)
   const clickHandle = () => {
     navigate("/chat");
   };

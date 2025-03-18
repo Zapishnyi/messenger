@@ -13,7 +13,6 @@ import IUserSignUp from "../interfaces/IUserSignUp";
 import { store } from "../redux/store";
 
 import IMessage from "../interfaces/IMessage";
-import IMessageEditDto from "../interfaces/IMessageEditDto";
 import IUploadResponse from "../interfaces/IUploadResponse";
 import { storage } from "./localStorage.service";
 
@@ -48,9 +47,7 @@ interface IApiService {
   };
   message: {
     all: (id: string) => Promise<IMessage[]>;
-    edit: (id: string, body: IMessageEditDto) => Promise<IMessage>;
-    delete: (id: string) => Promise<void>;
-    file_upload: (files: FormData) => Promise<IUploadResponse>;
+      file_upload: (files: FormData) => Promise<IUploadResponse>;
     file_download: (id: string) => Promise<Blob>;
   };
   health: () => Promise<IHealth>;
@@ -78,15 +75,7 @@ export const api: IApiService = {
   message: {
     all: (id) =>
       axiosInstance.get(urls.message.all(id)).then((response) => response.data),
-    edit: (id, body) =>
-      axiosInstance
-        .patch(urls.message.edit(id), body)
-        .then((response) => response.data),
-    delete: (id) =>
-      axiosInstance
-        .delete(urls.message.delete(id))
-        .then((response) => response.data),
-    file_upload: (files) =>
+       file_upload: (files) =>
       axiosInstance
         .post(urls.message.file_upload, files, {
           headers: { "Content-Type": "multipart/form-data" },

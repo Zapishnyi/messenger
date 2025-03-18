@@ -8,7 +8,6 @@ import {
 
 import { errorHandle } from "../../helpers/error-handle";
 import IMessage from "../../interfaces/IMessage";
-import IMessageEdit from "../../interfaces/IMessageEdit";
 import { api } from "../../services/messenger.api.service";
 
 interface IInitial {
@@ -35,24 +34,6 @@ const getMessages = createAsyncThunk(
         (a, b) => new Date(a.created).getTime() - new Date(b.created).getTime()
       );
       return thunkAPI.fulfillWithValue(messagesSorted);
-    } catch (e) {
-      const error = errorHandle(e);
-      return thunkAPI.rejectWithValue(error.message);
-    } finally {
-      thunkAPI.dispatch(MessageActions.setLoadingState(false));
-    }
-  }
-);
-
-const editMessage = createAsyncThunk(
-  "messages/editMessage",
-  async ({ content, filesToDelete, id }: IMessageEdit, thunkAPI) => {
-    try {
-      const dto = { content, filesToDelete };
-      const messageUpdated = await api.message.edit(id, dto);
-      thunkAPI.dispatch(MessageActions.clearFilesToDelete());
-      thunkAPI.dispatch(MessageActions.setMessageOnEdit(null));
-      return thunkAPI.fulfillWithValue(messageUpdated);
     } catch (e) {
       const error = errorHandle(e);
       return thunkAPI.rejectWithValue(error.message);
@@ -111,13 +92,8 @@ export const messageSlice = createSlice({
       .addCase(getMessages.fulfilled, (state, action) => {
         state.messages = action.payload;
       })
-      .addCase(editMessage.fulfilled, (state, action) => {
-        state.messages = [...state.messages].map((m) =>
-          m.id === action.payload.id ? action.payload : m
-        );
-      })
-          .addMatcher(
-        isRejected(getMessages, editMessage),
+               .addMatcher(
+        isRejected(getMessages),
         (state, action) => {
           console.error(
             "Messages receive sequence failed with error:",
@@ -126,7 +102,7 @@ export const messageSlice = createSlice({
         }
       )
       .addMatcher(
-        isPending(getMessages, editMessage),
+        isPending(getMessages),
         (state) => {
           state.loadingState = true;
         }
@@ -137,6 +113,5 @@ export const messageSlice = createSlice({
 export const MessageActions = {
   ...messageSlice.actions,
   getMessages,
-  editMessage,
- 
+
 };

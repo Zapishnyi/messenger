@@ -64,13 +64,4 @@ export class MessageService {
       },
     );
   }
-  public async deleteMessage(message_id: string): Promise<void> {
-    await this.entityManager.transaction(
-      this.isolationLevel.set(),
-      async (em: EntityManager) => {
-        const messageRepositoryEM = em.getRepository(MessageEntity);
-        await messageRepositoryEM.delete({ id: message_id });
-      },
-    );
-  }
 }

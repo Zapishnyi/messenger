@@ -62,7 +62,7 @@ export const useSocket = (token: string | null): Socket | null => {
     });
 
       newSocket.on("message_edited", (message: IMessage) => {
-       
+       console.log('message edited', message)
       if (contactChosenRef.current?.id === message.sender_id || userLoggedRef?.current?.id === message.sender_id) {
               dispatch(MessageActions.editMessage(message));
       }
