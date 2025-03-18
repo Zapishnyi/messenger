@@ -94,7 +94,8 @@ export const messageSlice = createSlice({
       })
                .addMatcher(
         isRejected(getMessages),
-        (state, action) => {
+                 (state, action) => {
+         
           console.error(
             "Messages receive sequence failed with error:",
             action.payload

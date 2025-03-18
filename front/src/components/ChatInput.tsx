@@ -70,7 +70,7 @@ const ChatInput: FC<IProps> = ({ socket }) => {
           setSelectedFiles([]);
         }
       } catch (e) {
-        errorHandle(e);
+         errorHandle(e)
       }
     }
   };

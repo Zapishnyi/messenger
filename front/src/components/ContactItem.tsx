@@ -4,6 +4,7 @@ import IUser from "../interfaces/IUser";
 import { MessageActions } from "../redux/Slices/messageSlice";
 import { UsersActions } from "../redux/Slices/usersSlice";
 import { useAppDispatch, useAppSelector } from "../redux/store";
+import { SvgUserAvatar } from './SvgAvatar';
 import { SvgMessage } from "./SvgMessage";
 interface IProps {
   socket: Socket | null;
@@ -21,10 +22,9 @@ useEffect(() => {
 }, [contactChosen, unreadMessages ]);
   
   const online = users_online.includes(user.id)
-    ? "bg-[#90f997]"
-    : "bg-[#f1b7b7]";
+   
   
-  const chosenMark = contactChosen?.id === user.id ? "border-[1px] border-black" : "";
+  const chosenMark = contactChosen?.id === user.id ? "border-[1px] border-black" : "border-[1px] border-[#e8e8e8]";
 
   const dispatch = useAppDispatch();
 
@@ -34,11 +34,18 @@ useEffect(() => {
      }
   return (
     <div
-      className={`w-full h-fit p-[5px] ${online} ${chosenMark} cursor-pointer hover:bg-[#cecdcd] flex justify-between`}
+      className={`w-full h-fit p-[5px] bg-[#e8e8e8] ${chosenMark} cursor-pointer hover:bg-[#c7c7c7] transition duration-[0.3s] flex justify-between`}
       onClick={contactChosenHandler}
     >
-      <p>{user.nick_name}</p>
-      {!!newMessages && <div className="w-[20px] h-[20px] flex justify-center items-center relative"><SvgMessage />
+      <div className="flex gap-[10px] items-start">
+        <div className="relative">
+          <SvgUserAvatar />
+           {online && <div className="absolute bottom-0 right-[-2px] w-[10px] h-[10px] bg-[#90f997] rounded-full"></div>}
+        </div>
+        <p>{user.nick_name}</p>
+      
+      </div>
+         {!!newMessages && <div className="w-[20px] h-[20px] flex justify-center items-center relative"><SvgMessage />
         <p className="absolute top-[8px] right-[-5px] bg-white rounded-full px-1 text-xs shadow-md">{newMessages}</p></div>}
      </div>
   );

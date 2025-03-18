@@ -99,7 +99,7 @@ export const usersSlice = createSlice({
         state.userLogged = action.payload;
       })
       .addMatcher(isRejected(getAllUsers, getMe), (state, action) => {
-        console.error(
+                console.error(
           "Users receive sequence failed with error:",
           action.payload
         );

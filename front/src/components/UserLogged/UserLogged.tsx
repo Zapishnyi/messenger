@@ -4,6 +4,7 @@ import { UsersActions } from "../../redux/Slices/usersSlice";
 import { useAppDispatch } from "../../redux/store";
 
 import { FC, useState } from "react";
+import { errorHandle } from "../../helpers/error-handle";
 import { storage } from "../../services/localStorage.service";
 import { api } from "../../services/messenger.api.service";
 import SvgUser from "./SvgUser";
@@ -20,8 +21,8 @@ const UserLogged: FC<IProps> = ({ nick_name }) => {
       storage.deleteTokens();
       dispatch(UsersActions.setUser(null));
       navigate("/auth/sign-in");
-    } catch (err) {
-      console.error(`Log out failed with error: ${err}`);
+    } catch (e) {
+      errorHandle(e)
     }
   };
   return (

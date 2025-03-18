@@ -1,4 +1,5 @@
 import { FC, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { errorHandle } from "../helpers/error-handle";
 import IFile from "../interfaces/IFile";
@@ -15,6 +16,7 @@ interface IProps {
 }
 const FileComponent: FC<IProps> = ({ fileData, isOwned, message ,socket}) => {
   const downloadLinkRef = useRef<HTMLAnchorElement>(null);
+  const navigate = useNavigate();
   const { messageOnEdit } = useAppSelector((state) => state.messages);
   const fileDownloadHandle = async () => {
     try {
@@ -32,7 +34,7 @@ const FileComponent: FC<IProps> = ({ fileData, isOwned, message ,socket}) => {
         window.URL.revokeObjectURL(url);
       }
     } catch (e) {
-      errorHandle(e);
+      errorHandle(e)
     }
   };
   return (
