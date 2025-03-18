@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 
 import IErrorModified from "../interfaces/IErrorModified";
 import IErrorResponse from "../interfaces/IErrorResponse";
+import { navigateTo } from "./navigate-to";
 
 
 export const errorHandle = (e: any): IErrorModified => {
@@ -12,8 +13,8 @@ export const errorHandle = (e: any): IErrorModified => {
   } else {
     message = [error?.message];
   }
-  if (error?.status !== 401) {
-    // navigateTo("/error", { state: message });
+  if (!error?.status) {
+    navigateTo("/error", { state: message });
   }
   return { message, status: error?.status };
 };
