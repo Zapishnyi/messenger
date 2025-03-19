@@ -1,3 +1,4 @@
+// eslint-disable-next-line simple-import-sort/imports
 import {
   Controller,
   Get,
@@ -128,7 +129,8 @@ export class MessageController {
     },
   })
   @ApiOperation({
-    summary: 'Download logged user\'s or interlocutor\'s file by file ID.',
+    // eslint-disable-next-line quotes
+    summary: "Download logged user's or interlocutor's file by file ID.",
   })
   @UseGuards(JwtAccessGuard, FileOwnershipGuard)
   @ApiBearerAuth('Access-Token')

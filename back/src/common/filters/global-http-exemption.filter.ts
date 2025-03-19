@@ -4,7 +4,7 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
-  HttpStatus
+  HttpStatus,
 } from '@nestjs/common';
 import { JsonWebTokenError, TokenExpiredError } from '@nestjs/jwt';
 import { Request, Response } from 'express';
