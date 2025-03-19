@@ -1,11 +1,15 @@
-import { FC } from 'react';
+import { FC } from 'react'
 
 interface IProps {
-  errorMessage: string;
+  errorMessage: string
 }
 
 const ErrorItem: FC<IProps> = ({ errorMessage }) => {
-  return <li><p>{errorMessage}</p></li>;
-};
+  return (
+    <li>
+      <p>{errorMessage}</p>
+    </li>
+  )
+}
 
-export default ErrorItem;
+export default ErrorItem

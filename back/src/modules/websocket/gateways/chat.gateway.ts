@@ -26,8 +26,8 @@ import { FileEntity } from '../../../database/entities/file.entity';
 import { MessageEntity } from '../../../database/entities/message.entity';
 import { MessageEditReqDto } from '../../message/dto/req/message-edit.req.dto';
 import { MessageService } from '../../message/services/message.service';
-import { MessageEditDto } from '../dto/ws-message-edit.dto';
 import { MessageDto } from '../dto/ws-message.dto';
+import { MessageEditDto } from '../dto/ws-message-edit.dto';
 
 @Injectable()
 @WebSocketGateway({
@@ -73,7 +73,7 @@ export class ChatGateWay
       this.emitOnlineUsers();
     } else {
       client.emit('error', {
-        message: `status: 401 | messages:  Unauthorized`,
+        message: 'status: 401 | messages:  Unauthorized',
       });
       process.nextTick(() => client.disconnect());
       return;

@@ -1,3 +1,3 @@
 export interface IHealth {
-  health: string;
+  health: string
 }

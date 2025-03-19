@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Logger, Post, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -45,6 +45,7 @@ export class AuthController {
     @Body() dto: UserAuthReqDto,
     @Req() request: Request,
   ): Promise<AuthResDto> {
+    Logger.log('sign in fired');
     const [user, tokens] = await this.authService.signIn(dto, request);
     return { tokens, user: this.userPresenter.toResponseDtoFromEntity(user) };
   }

@@ -1,6 +1,6 @@
-import Joi from "joi";
+import Joi from 'joi'
 
-import IUserSignUp from "../interfaces/IUserSignUp";
+import IUserSignUp from '../interfaces/IUserSignUp'
 
 const userSingUpValidator: Joi.ObjectSchema<IUserSignUp> = Joi.object({
   password: Joi.string()
@@ -10,10 +10,10 @@ const userSingUpValidator: Joi.ObjectSchema<IUserSignUp> = Joi.object({
     .min(5)
     .max(16)
     .messages({
-      "string.pattern.base": `digit, lowercase letter, uppercase letter, 
+      'string.pattern.base': `digit, lowercase letter, uppercase letter, 
        special character, no space`,
-      "string.min": "5 characters min",
-      "string.max": "16 characters max",
+      'string.min': '5 characters min',
+      'string.max': '16 characters max',
     }),
   email: Joi.string()
     .email({ tlds: { allow: false } })
@@ -22,9 +22,9 @@ const userSingUpValidator: Joi.ObjectSchema<IUserSignUp> = Joi.object({
     .min(3)
     .max(100)
     .messages({
-      "string.email.base": "must be valid email address",
-      "string.min": "3 characters min",
-      "string.max": "100 characters max",
+      'string.email.base': 'must be valid email address',
+      'string.min': '3 characters min',
+      'string.max': '100 characters max',
     }),
 
   nick_name: Joi.string()
@@ -34,11 +34,10 @@ const userSingUpValidator: Joi.ObjectSchema<IUserSignUp> = Joi.object({
     .min(1)
     .max(25)
     .messages({
-      "string.pattern.base":
-        "Letters, numbers, and symbols (!#=$%&()_<>-) are allowed",
-      "string.min": "1 characters min",
-      "string.max": "25 characters max",
+      'string.pattern.base': 'Letters, numbers, and symbols (!#=$%&()_<>-) are allowed',
+      'string.min': '1 characters min',
+      'string.max': '25 characters max',
     }),
-});
+})
 
-export default userSingUpValidator;
+export default userSingUpValidator

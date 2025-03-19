@@ -1,39 +1,37 @@
-import { FC, useState } from "react";
-import { MessageActions } from "../redux/Slices/messageSlice";
-import { useAppDispatch, useAppSelector } from "../redux/store";
+import { FC, useState } from 'react'
+import { Socket } from 'socket.io-client'
 
-import { Socket } from "socket.io-client";
-import IMessage from "../interfaces/IMessage";
-import { SvgChecked } from "./SvgChecked";
-import SvgDelete from "./SvgDelete";
-import { SvgEditPen } from "./SvgEditPen";
+import IMessage from '../interfaces/IMessage'
+import { MessageActions } from '../redux/Slices/messageSlice'
+import { useAppDispatch, useAppSelector } from '../redux/store'
+import { SvgChecked } from './SvgChecked'
+import SvgDelete from './SvgDelete'
+import { SvgEditPen } from './SvgEditPen'
 interface IProps {
-  edit: boolean;
-  message: IMessage;
-  socket: Socket | null;
-  file_id?: string;
+  edit: boolean
+  message: IMessage
+  socket: Socket | null
+  file_id?: string
 }
-const Instruments: FC<IProps> = ({ edit, message, file_id , socket}) => {
-  const { messageOnEdit } = useAppSelector((state) => state.messages);
-  const [checked, setChecked] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
+const Instruments: FC<IProps> = ({ edit, message, file_id, socket }) => {
+  const { messageOnEdit } = useAppSelector((state) => state.messages)
+  const [checked, setChecked] = useState<boolean>(false)
+  const dispatch = useAppDispatch()
   const deleteHandle = () => {
     if (messageOnEdit) {
-      setChecked(true);
-      if (file_id) dispatch(MessageActions.addFileToDelete(file_id));
+      setChecked(true)
+      if (file_id) dispatch(MessageActions.addFileToDelete(file_id))
     } else {
-       socket?.emit("delete_message", message);
-      // dispatch(MessageActions.deleteMessage(message.id));
+      socket?.emit('delete_message', message)
     }
-  };
+  }
   const editHandle = () => {
-    dispatch(MessageActions.setMessageOnEdit(message));
-  };
+    dispatch(MessageActions.setMessageOnEdit(message))
+  }
   return (
     <div
-      className={
-        "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#ffffffbc] flex justify-end items-center gap-[5px] "
-      }
+      className={`absolute top-1/2 left-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center
+        justify-end gap-[5px] bg-[#ffffffbc]`}
     >
       {edit && (
         <div onClick={editHandle}>
@@ -48,7 +46,7 @@ const Instruments: FC<IProps> = ({ edit, message, file_id , socket}) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Instruments;
+export default Instruments

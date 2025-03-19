@@ -1,7 +1,7 @@
-import IAuthTokensPair from './IAuthTokensPair';
-import IUser from './IUser';
+import IAuthTokensPair from './IAuthTokensPair'
+import IUser from './IUser'
 
 export default interface IAuthTokens {
-  tokens: IAuthTokensPair;
-  user: IUser;
+  tokens: IAuthTokensPair
+  user: IUser
 }

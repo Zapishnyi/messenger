@@ -32,7 +32,7 @@ import { FilesOutputPresenterService } from './services/files-output-presenter.s
 import { MessagePresenterService } from './services/message-presenter.service';
 import { MessageService } from './services/message.service';
 
-@ApiTags('3.Massages')
+@ApiTags('3.Messages')
 @Controller('/message')
 export class MessageController {
   constructor(
@@ -44,6 +44,7 @@ export class MessageController {
 
   // Get logged user data -----------------------------------------------------
   @ApiOperation({
+    // eslint-disable-next-line quotes
     summary: "Receive logged user's entire conversation by interlocutor ID.",
   })
   @ApiUnauthorizedResponse({
@@ -127,7 +128,7 @@ export class MessageController {
     },
   })
   @ApiOperation({
-    summary: "Download logged user's or interlocutor's file by file ID.",
+    summary: 'Download logged user\'s or interlocutor\'s file by file ID.',
   })
   @UseGuards(JwtAccessGuard, FileOwnershipGuard)
   @ApiBearerAuth('Access-Token')

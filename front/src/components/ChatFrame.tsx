@@ -1,32 +1,31 @@
-import { FC, useEffect, useRef } from "react";
-import { Socket } from "socket.io-client";
-import { useAppSelector } from "../redux/store";
-import Message from "./Message";
+import { FC, useEffect, useRef } from 'react'
+import { Socket } from 'socket.io-client'
 
-
+import { useAppSelector } from '../redux/store'
+import Message from './Message'
 interface IProps {
-  socket: Socket | null;
+  socket: Socket | null
 }
-const ChatFrame: FC<IProps> = ({socket}) => {
-  const { messages } = useAppSelector((state) => state.messages);
+const ChatFrame: FC<IProps> = ({ socket }) => {
+  const { messages } = useAppSelector((state) => state.messages)
 
-  const chatFrameRef = useRef<HTMLDivElement>(null);
+  const chatFrameRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (chatFrameRef.current) {
-      chatFrameRef.current.scrollTop = chatFrameRef.current.scrollHeight;
+      chatFrameRef.current.scrollTop = chatFrameRef.current.scrollHeight
     }
-  }, [messages]);
+  }, [messages])
 
   return (
     <div
       ref={chatFrameRef}
-      className="box-border w-full h-full  overflow-y-auto grow-1 flex justify-start flex-col gap-[10px] p-[5px]"
+      className={'box-border flex h-full w-full grow-1 flex-col gap-[10px] overflow-y-auto p-[5px]'}
     >
       {messages.map((m, i) => (
         <Message key={i} message={m} socket={socket} />
       ))}
     </div>
-  );
+  )
 }
 
-export default ChatFrame;
+export default ChatFrame

@@ -1,4 +1,4 @@
 export default interface IAuthTokensPair {
-  access: string;
-  refresh: string;
+  access: string
+  refresh: string
 }

@@ -5,6 +5,7 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { JsonWebTokenError, TokenExpiredError } from '@nestjs/jwt';
 import { Request, Response } from 'express';
@@ -54,6 +55,7 @@ export class GlobalHTTPExceptionFilter implements ExceptionFilter {
         break;
 
       default:
+        Logger.log(exception);
         status = HttpStatus.INTERNAL_SERVER_ERROR;
         messages = ['Internal server error'];
     }

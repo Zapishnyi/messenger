@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { EntityManager } from 'typeorm';
@@ -69,6 +69,7 @@ export class AuthService {
     return await this.entityManager.transaction(
       this.isolationLevel.set(),
       async (em: EntityManager): Promise<[UserEntity, AuthTokenPairResDto]> => {
+        Logger.log('sign in service fired');
         const usersRepositoryEM = em.getRepository(UserEntity);
         const user = await usersRepositoryEM.findOne({
           where: { email: dto.email },

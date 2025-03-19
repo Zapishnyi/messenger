@@ -1,11 +1,11 @@
-import SingUpForm from "../forms/SingUpForm";
+import SingUpForm from '../forms/SingUpForm'
 
 const SingUp = () => {
   return (
-    <div className="w-full h-[80dvh] flex justify-center items-center">
+    <div className={'flex h-[80dvh] w-full items-center justify-center'}>
       <SingUpForm />
     </div>
-  );
-};
+  )
+}
 
-export default SingUp;
+export default SingUp

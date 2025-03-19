@@ -1,20 +1,19 @@
-import { AxiosError } from "axios";
+import { AxiosError } from 'axios'
 
-import IErrorModified from "../interfaces/IErrorModified";
-import IErrorResponse from "../interfaces/IErrorResponse";
-import { navigateTo } from "./navigate-to";
-
+import IErrorModified from '../interfaces/IErrorModified'
+import IErrorResponse from '../interfaces/IErrorResponse'
+import { navigateTo } from './navigate-to'
 
 export const errorHandle = (e: any): IErrorModified => {
-  const error = e as AxiosError<IErrorResponse>;
-  let message: string[];
+  const error = e as AxiosError<IErrorResponse>
+  let message: string[]
   if (error.response?.data?.messages?.length) {
-    message = error.response.data.messages;
+    message = error.response.data.messages
   } else {
-    message = [error?.message];
+    message = [error?.message]
   }
   if (!error?.status) {
-    navigateTo("/error", { state: message });
+    navigateTo('/error', { state: message })
   }
-  return { message, status: error?.status };
-};
+  return { message, status: error?.status }
+}

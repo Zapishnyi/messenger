@@ -1,15 +1,13 @@
-import { FC } from "react";
+import { FC } from 'react'
 
-
-import SignInForm from "../forms/SignIn.form";
+import SignInForm from '../forms/SignIn.form'
 
 const SignIn: FC = () => {
- 
   return (
-    <div className="w-full h-[80dvh] flex justify-center items-center">
+    <div className={'flex h-[80dvh] w-full items-center justify-center'}>
       <SignInForm />
     </div>
-  );
-};
+  )
+}
 
-export default SignIn;
+export default SignIn

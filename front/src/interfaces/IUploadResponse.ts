@@ -1,5 +1,5 @@
-import IFile from "./IFile";
+import IFile from './IFile'
 
 export default interface IUploadResponse {
-  files: IFile[];
+  files: IFile[]
 }

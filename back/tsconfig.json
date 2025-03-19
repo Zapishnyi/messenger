@@ -16,7 +16,8 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "typeRoots": ["node_modules/@types", "src/types"]
   },
   "exclude": [
     "node_modules",
@@ -24,6 +25,6 @@
     "build",
     "coverage",
     "src/database/migrations/**/*"
-  ]
-  // "include": ["src/**/*", "types/**/*", "types", "eslint-plugin-import.d.ts"]
+  ],
+  "include": ["src/**/*","ormconfig.ts", "types/**/*", "types", "eslint-plugin-import.d.ts","eslint.config.mjs"]
 }

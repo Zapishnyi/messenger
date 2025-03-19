@@ -6,7 +6,7 @@ import { DataSource } from 'typeorm'; /* import of connection to database*/
 import getter from './src/configs/envConfiguration'; /* import configuration from ENV configuration*/
 
 dotenv.config({
-  // path: './environments/local.env',  //when back in system
+  // path: "./environments/local.env", //when back in system
   path: './environments/docker.env', //when back in dicker
 }); /* loads environment variables from a .env file into process.env */
 

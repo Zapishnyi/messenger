@@ -1,19 +1,18 @@
-import { useState } from "react";
+import { useState } from 'react'
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
-import { FieldValues, Path, UseFormRegister } from "react-hook-form";
-
-import { InputFieldTypeEnum } from "../../enums/input-field-type.enum";
-import { SvgEyeClosed } from "./SvgEyeClosed";
-import { SvgEyeOpen } from "./SvgEyeOpen";
+import { InputFieldTypeEnum } from '../../enums/input-field-type.enum'
+import { SvgEyeClosed } from './SvgEyeClosed'
+import { SvgEyeOpen } from './SvgEyeOpen'
 
 interface IProps<T extends FieldValues> {
-  register: UseFormRegister<T>;
-  field_name: Path<T>;
-  field_label: string;
-  field_type: InputFieldTypeEnum;
-  error?: string;
-  required?: boolean;
-  placeholder?: string;
+  register: UseFormRegister<T>
+  field_name: Path<T>
+  field_label: string
+  field_type: InputFieldTypeEnum
+  error?: string
+  required?: boolean
+  placeholder?: string
 }
 
 const FormInput = <T extends FieldValues>({
@@ -26,43 +25,41 @@ const FormInput = <T extends FieldValues>({
   placeholder,
 }: IProps<T>) => {
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(
-    field_type !== InputFieldTypeEnum.PASSWORD
-  );
+    field_type !== InputFieldTypeEnum.PASSWORD,
+  )
   const type =
     field_type === InputFieldTypeEnum.PASSWORD
       ? passwordVisibility
         ? InputFieldTypeEnum.TEXT
         : InputFieldTypeEnum.PASSWORD
-      : field_type;
+      : field_type
   const eRestrictHandle = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (
-      (e.key === "e" ||
-        e.key === "E" ||
-        e.key === "+" ||
-        e.key === "-" ||
-        e.key === ".") &&
+      (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-' || e.key === '.') &&
       type === InputFieldTypeEnum.NUMBER
     ) {
-      e.preventDefault();
+      e.preventDefault()
     }
-  };
+  }
   return (
-    <label className={"relative flex flex-col text-left select-non"}>
-      {field_label}:{" "}
+    <label className={'select-non relative flex flex-col text-left'}>
+      {field_label}:{' '}
       <input
         className={
-          "text-lg p-[5px] bg-[#ecf2fe]  px-[10px] border border-gray-200/20 rounded-md w-[400px]"
+          'w-[400px] rounded-md border border-gray-200/20 bg-[#ecf2fe] p-[5px] px-[10px] text-lg'
         }
         onKeyDown={eRestrictHandle}
         type={type}
         autoComplete="on"
         placeholder={placeholder}
-        {...register(field_name, { required: required || true })}
+        {...register(field_name, {
+          required: required || true,
+        })}
       />
       {!!error && (
         <p
           className={
-            "text-red-600 absolute bottom-[37px] right-0 text-right w-4/5 :before:content-['*']"
+            ":before:content-['*'] absolute right-0 bottom-[37px] w-4/5 text-right text-red-600"
           }
         >
           {error}
@@ -70,14 +67,14 @@ const FormInput = <T extends FieldValues>({
       )}
       {field_type === InputFieldTypeEnum.PASSWORD && (
         <div
-          className={"absolute top-[30px] right-[5px] cursor-pointer"}
+          className={'absolute top-[30px] right-[5px] cursor-pointer'}
           onClick={() => setPasswordVisibility((current) => !current)}
         >
           {passwordVisibility ? <SvgEyeClosed /> : <SvgEyeOpen />}
         </div>
       )}
     </label>
-  );
-};
+  )
+}
 
-export default FormInput;
+export default FormInput

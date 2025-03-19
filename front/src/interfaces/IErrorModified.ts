@@ -1,4 +1,4 @@
 export default interface IErrorModified {
-  message: string[];
-  status: number | undefined;
+  message: string[]
+  status: number | undefined
 }

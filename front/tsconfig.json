@@ -14,7 +14,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",    
   },
-  "include": ["src", "vite.config.ts", "eslint.config.mjs"]
+   "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    "src/database/migrations/**/*"
+  ],
+  "include": ["src/**/*", "vite.config.ts", "eslint.js","eslint.config.mjs"]
 }

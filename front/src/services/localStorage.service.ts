@@ -1,9 +1,9 @@
 interface ILocalStorageService {
-  setAccessToken: (token: string) => void;
-  setRefreshToken: (token: string) => void;
-  getAccessToken: () => string | null;
-  getRefreshToken: () => string | null;
-  deleteTokens: () => void; 
+  setAccessToken: (token: string) => void
+  setRefreshToken: (token: string) => void
+  getAccessToken: () => string | null
+  getRefreshToken: () => string | null
+  deleteTokens: () => void
 }
 
 export const storage: ILocalStorageService = {
@@ -12,7 +12,7 @@ export const storage: ILocalStorageService = {
   getAccessToken: () => localStorage.getItem('accessToken'),
   getRefreshToken: () => localStorage.getItem('refreshToken'),
   deleteTokens: () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-  }
-};
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+  },
+}
