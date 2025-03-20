@@ -18,6 +18,7 @@ const ChatInput: FC<IProps> = ({ socket }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const { me_online } = useAppSelector((state) => state.online)
   const { messageOnEdit, filesToDelete } = useAppSelector((state) => state.messages)
+  const [fileTooLarge, setFileTooLarge] = useState<string[] | null>()
 
   useEffect(() => {
     if (textInputRef.current) textInputRef.current.value = ''
@@ -49,6 +50,7 @@ const ChatInput: FC<IProps> = ({ socket }) => {
           selectedFiles.forEach((file) => {
             formData.append(`file`, file)
           })
+
           const { files } = await api.message.file_upload(formData)
           filesStore = files
         }
@@ -82,14 +84,28 @@ const ChatInput: FC<IProps> = ({ socket }) => {
   }
 
   const fileChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (files) {
-      setSelectedFiles(Array.from(files)) // Convert FileList to an array
+    if (e.target.files) {
+      const files = Array.from(e.target.files)
+      const filesTooLarge: string[] = []
+      files.forEach((file) => {
+        if (file.size > 1024 * 1024) filesTooLarge.push(file.name)
+      })
+      if (filesTooLarge.length) {
+        setFileTooLarge(filesTooLarge)
+        setTimeout(() => setFileTooLarge(null), 4000)
+        e.target.value = ''
+        return
+      }
+      setSelectedFiles(files) // Convert FileList to an array
+      e.target.value = ''
     }
   }
-
   return (
-    <div className={'justify-content-end flex h-[50px] w-full gap-[5px] border border-gray-300'}>
+    <div
+      className={
+        ' relative justify-content-end flex h-[50px] w-full gap-[5px] border border-gray-300'
+      }
+    >
       <input
         disabled={!me_online}
         ref={textInputRef}
@@ -106,16 +122,27 @@ const ChatInput: FC<IProps> = ({ socket }) => {
         onChange={fileChangeHandle}
         multiple
       />
-
-      <button
-        disabled={!me_online}
-        onClick={attachFileHandle}
-        className={`flex h-full w-[100px] flex-grow-0 cursor-pointer items-center justify-center p-[5px]
-          hover:bg-gray-100`}
-      >
-        {!!selectedFiles.length && <SvgFile className="h-[20px]" />}
-        {messageOnEdit ? 'Cancel' : 'Attach'}
-      </button>
+      <div className={' h-full w-[100px] flex flex-grow-0'}>
+        <button
+          disabled={!me_online}
+          onClick={attachFileHandle}
+          className={
+            'flex h-full w-full cursor-pointer items-center justify-center p-[5px] hover:bg-gray-100'
+          }
+        >
+          {!!selectedFiles.length && <SvgFile className="h-[20px]" />}
+          {messageOnEdit ? 'Cancel' : 'Attach'}
+        </button>
+        {fileTooLarge && (
+          <p
+            className={`absolute top-[-50px] right-[10px] z-10 flex h-[20px]] w-fit items-center text-wrap-none
+            justify-center text-[#505050] bg-[#ededede0] shadow-md px-[10px] py-[5px] rounded-[10px]
+            border-[1px] border-black animate-fade-out`}
+          >
+            {`${fileTooLarge.length > 1 ? 'Files:' : 'File:'} ${fileTooLarge.join(', ')} size ${fileTooLarge.length > 1 ? 'are' : 'is'} more than 1mb!`}
+          </p>
+        )}
+      </div>
 
       <button
         disabled={!me_online}

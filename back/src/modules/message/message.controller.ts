@@ -99,7 +99,7 @@ export class MessageController {
     schema: {
       type: 'object',
       properties: {
-        files: {
+        file: {
           type: 'array',
           items: { type: 'string', format: 'binary' },
         },
