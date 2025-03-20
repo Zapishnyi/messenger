@@ -31,7 +31,7 @@ const Instruments: FC<IProps> = ({ edit, message, file_id, socket }) => {
   return (
     <div
       className={`absolute top-1/2 left-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center
-        justify-end gap-[5px] bg-[#ffffffbc]`}
+        justify-end gap-[5px] bg-[#ffffffbc] animate-fade-in`}
     >
       {edit && (
         <div onClick={editHandle}>

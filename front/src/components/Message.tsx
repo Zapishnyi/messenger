@@ -17,7 +17,7 @@ const Message: FC<IProps> = memo(({ message, socket }) => {
   const [hover, setHover] = useState<boolean>(false)
 
   return (
-    <div className={`${isOwned ? 'self-end' : 'self-start'} flex w-fit flex-col`}>
+    <div className={`${isOwned ? 'self-end' : 'self-start'} flex w-fit flex-col animate-fade-in`}>
       <div
         className={'relative w-fit overflow-hidden'}
         onMouseEnter={() => {

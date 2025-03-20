@@ -42,7 +42,11 @@ const UserLogged: FC<IProps> = ({ nick_name }) => {
           <SvgUser />
           <div className={'relative flex h-full items-center justify-center'}>
             <p>{`${nick_name}`}</p>
-            {hover && <p className="absolute top-1/2 left-[-100px] -translate-y-1/2">Log out</p>}
+            {hover && (
+              <p className="absolute top-1/2 left-[-100px] -translate-y-1/2 animate-fade-in">
+                Log out
+              </p>
+            )}
           </div>
         </>
       )}
