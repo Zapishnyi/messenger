@@ -46,7 +46,7 @@ const ChatInput: FC<IProps> = ({ socket }) => {
         if (selectedFiles && selectedFiles.length > 0) {
           const formData = new FormData()
 
-          selectedFiles.forEach((file, index) => {
+          selectedFiles.forEach((file) => {
             formData.append(`file`, file)
           })
           const { files } = await api.message.file_upload(formData)

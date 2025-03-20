@@ -14,6 +14,7 @@ const userSingUpValidator: Joi.ObjectSchema<IUserSignUp> = Joi.object({
        special character, no space`,
       'string.min': '5 characters min',
       'string.max': '16 characters max',
+      'string.empty': 'Password is required',
     }),
   email: Joi.string()
     .email({ tlds: { allow: false } })
@@ -25,6 +26,7 @@ const userSingUpValidator: Joi.ObjectSchema<IUserSignUp> = Joi.object({
       'string.email.base': 'must be valid email address',
       'string.min': '3 characters min',
       'string.max': '100 characters max',
+      'string.empty': 'Email is required',
     }),
 
   nick_name: Joi.string()
@@ -37,6 +39,7 @@ const userSingUpValidator: Joi.ObjectSchema<IUserSignUp> = Joi.object({
       'string.pattern.base': 'Letters, numbers, and symbols (!#=$%&()_<>-) are allowed',
       'string.min': '1 characters min',
       'string.max': '25 characters max',
+      'string.empty': 'Nick name is required',
     }),
 })
 
