@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { UsersActions } from '../redux/Slices/usersSlice'
 import { useAppDispatch, useAppSelector } from '../redux/store'
 import { storage } from '../services/localStorage.service'
-import UserLogged from './UserLogged/UserLogged'
+import UserLogged from './UserLogged'
 
 const HeaderMain = () => {
   const dispatch = useAppDispatch()

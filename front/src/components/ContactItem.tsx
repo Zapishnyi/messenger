@@ -5,8 +5,8 @@ import IUser from '../interfaces/IUser'
 import { MessageActions } from '../redux/Slices/messageSlice'
 import { UsersActions } from '../redux/Slices/usersSlice'
 import { useAppDispatch, useAppSelector } from '../redux/store'
-import { SvgUserAvatar } from './SvgAvatar'
 import { SvgMessage } from './SvgMessage'
+import User from './User'
 interface IProps {
   socket: Socket | null
   user: IUser
@@ -38,26 +38,7 @@ const ContactItem: FC<IProps> = ({ user }) => {
         duration-[0.3s] hover:bg-[#c7c7c7]`}
       onClick={contactChosenHandler}
     >
-      <div className="flex items-start gap-[10px]">
-        <div className="relative">
-          <SvgUserAvatar />
-          {online && (
-            <>
-              <div
-                className={
-                  'absolute right-[-2px] bottom-0 h-[10px] w-[10px] rounded-full bg-[#90f997] z-[6]'
-                }
-              ></div>
-              <div
-                className={
-                  'absolute right-[-3px] bottom-[-1px] h-[12px] w-[12px] rounded-full bg-[#000000] z-[5] '
-                }
-              ></div>
-            </>
-          )}
-        </div>
-        <p>{user.nick_name}</p>
-      </div>
+      <User online={online} nick_name={user.nick_name} />
       {!!newMessages && (
         <div className={'relative flex h-[20px] w-[20px] items-center justify-center'}>
           <SvgMessage />
