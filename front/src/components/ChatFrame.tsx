@@ -12,9 +12,9 @@ const ChatFrame: FC<IProps> = ({ socket }) => {
   const chatFrameRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (chatFrameRef.current) {
-      chatFrameRef.current.scrollTop = chatFrameRef.current.scrollHeight
+      // chatFrameRef.current.scrollTop = chatFrameRef.current.scrollHeight
     }
-  }, [messages.length])
+  }, [])
 
   return (
     <div
