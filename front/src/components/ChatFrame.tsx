@@ -19,7 +19,9 @@ const ChatFrame: FC<IProps> = ({ socket }) => {
   return (
     <div
       ref={chatFrameRef}
-      className={'box-border flex h-full w-full grow-1 flex-col gap-[10px] overflow-y-auto p-[5px]'}
+      className={
+        'box-border scroll-smooth flex h-full w-full grow-1 flex-col gap-[10px] overflow-y-auto p-[5px]'
+      }
     >
       {messages.map((m, i) => (
         <Message key={i} message={m} socket={socket} />
