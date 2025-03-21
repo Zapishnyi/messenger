@@ -40,10 +40,18 @@ const FileComponent: FC<IProps> = ({ fileData, isOwned, message, socket }) => {
   return (
     <div className={`flex gap-2 ${isOwned ? 'self-end' : 'self-start'} relative`}>
       <button className="flex cursor-pointer" onClick={fileDownloadHandle}>
-        <p>{fileData.file_name}</p>
-        <SvgFile className="h-[20px]" />
+        {isOwned ? (
+          <>
+            <p>{fileData.file_name}</p>
+            <SvgFile className="h-[20px]" />{' '}
+          </>
+        ) : (
+          <>
+            <SvgFile className="h-[20px]" />
+            <p>{fileData.file_name}</p>
+          </>
+        )}
       </button>
-
       <a ref={downloadLinkRef} style={{ display: 'none' }}></a>
       {message?.id === messageOnEdit?.id && messageOnEdit && (
         <Instruments edit={false} message={message} socket={socket} file_id={fileData.file_id} />
