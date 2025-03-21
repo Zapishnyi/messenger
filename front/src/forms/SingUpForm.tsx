@@ -65,8 +65,8 @@ const SingUpForm: FC = () => {
       />
 
       <button
-        className={`flex w-full cursor-pointer items-center justify-center rounded-md border border-gray-300
-          bg-[#87a1e3] p-2 px-8 shadow-md duration-300 hover:bg-[#9cabd2] hover:transition`}
+        className={`flex w-full cursor-pointer items-center animate-fade-in justify-center rounded-md border
+          border-gray-300 bg-[#87a1e3] p-2 px-8 shadow-md duration-300 hover:bg-[#9cabd2] hover:transition`}
         disabled={!isValid}
       >
         Submit
