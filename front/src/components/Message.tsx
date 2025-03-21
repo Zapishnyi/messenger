@@ -17,9 +17,12 @@ const Message: FC<IProps> = memo(({ message, socket }) => {
   const [hover, setHover] = useState<boolean>(false)
 
   return (
-    <div className={`${isOwned ? 'self-end' : 'self-start'} flex w-fit flex-col animate-fade-in`}>
+    <div
+      className={`${isOwned ? `self-end bg-[#e4f9d5] ${isEdited ? 'bg-[#fbe4e4] text-[#bbbbbb]' : 'bg-[#e4f9d5]'}` : 'self-start bg-[#d5e1f9]'}
+        rounded-md p-[5px] flex w-fit flex-col animate-fade-in relative `}
+    >
       <div
-        className={'relative w-fit overflow-hidden'}
+        className={' w-fit overflow-hidden'}
         onMouseEnter={() => {
           setHover(true)
         }}
@@ -28,11 +31,7 @@ const Message: FC<IProps> = memo(({ message, socket }) => {
         }}
       >
         <p
-          className={`${
-            isOwned
-              ? `self-end ${isEdited ? 'bg-[#f9d5d5]' : 'bg-[#e4f9d5]'}`
-              : 'self-start bg-[#d5e1f9]'
-            } w-fit min-w-[50px] rounded-md p-[5px]`}
+          className={`${isOwned ? 'self-end ' : 'self-start'} w-fit min-w-[50px]`}
         >{`${isOwned ? 'You: ' : contactChosen?.nick_name + ': '}${message.content}`}</p>
         {hover && message.sender_id === userLogged?.id && !messageOnEdit && (
           <Instruments edit={true} message={message} socket={socket} />

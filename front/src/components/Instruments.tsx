@@ -4,7 +4,6 @@ import { Socket } from 'socket.io-client'
 import IMessage from '../interfaces/IMessage'
 import { MessageActions } from '../redux/Slices/messageSlice'
 import { useAppDispatch, useAppSelector } from '../redux/store'
-import { SvgChecked } from './SvgChecked'
 import SvgDelete from './SvgDelete'
 import { SvgEditPen } from './SvgEditPen'
 interface IProps {
@@ -30,17 +29,17 @@ const Instruments: FC<IProps> = ({ edit, message, file_id, socket }) => {
   }
   return (
     <div
-      className={`absolute top-1/2 left-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center
-        justify-end gap-[5px] bg-[#ffffffbc] animate-fade-in`}
+      className={`absolute
+        ${checked ? 'w-full h-[1px] bg-[#000000] top-1/2 left-0 right-0 translate-y-[-50%]' : 'top-[2px] h-fit w-fit right-[0px] bg-[#ffffffc8]'}
+        rounded-full flex justify-evenly items-center text-[#000000] [&>*]:p-[5px] animate-fade-in`}
     >
       {edit && (
         <div onClick={editHandle}>
           <SvgEditPen />
         </div>
       )}
-      {checked ? (
-        <SvgChecked />
-      ) : (
+
+      {!checked && (
         <div onClick={deleteHandle}>
           <SvgDelete />
         </div>

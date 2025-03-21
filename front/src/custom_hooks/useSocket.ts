@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 
-import { navigateTo } from '../helpers/navigate-to'
 import IMessage from '../interfaces/IMessage'
 import IUser from '../interfaces/IUser'
 import { MessageActions } from '../redux/Slices/messageSlice'
@@ -48,9 +47,10 @@ export const useSocket = (token: string | null): Socket | null => {
     })
 
     newSocket.on('error', (error: { message: string }) => {
-      navigateTo('/error', {
-        state: [error.message],
-      })
+      console.error('Websocket error:', error.message)
+      //   navigateTo('/error', {
+      //     state: [error.message],
+      //   })
     })
 
     newSocket.on('receive_message', (message: IMessage) => {

@@ -5,7 +5,7 @@ const SvgDelete: FC = () => {
     <svg
       viewBox="0 0 24 24"
       className={
-        'w-[22px] transform cursor-pointer transition-all duration-[0.3s] ease-in-out hover:scale-[1.2]'
+        'w-[20px] transform cursor-pointer transition-all duration-[0.3s] ease-in-out hover:scale-[1.2]'
       }
     >
       <path
