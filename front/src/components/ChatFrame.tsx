@@ -14,7 +14,7 @@ const ChatFrame: FC<IProps> = ({ socket }) => {
     if (chatFrameRef.current) {
       chatFrameRef.current.scrollTop = chatFrameRef.current.scrollHeight
     }
-  }, [messages])
+  }, [messages.length])
 
   return (
     <div
