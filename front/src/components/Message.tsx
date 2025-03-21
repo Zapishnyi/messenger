@@ -1,4 +1,4 @@
-import { FC, memo, useState } from 'react'
+import { FC, memo, useEffect, useState } from 'react'
 import { Socket } from 'socket.io-client'
 
 import IMessage from '../interfaces/IMessage'
@@ -15,6 +15,8 @@ const Message: FC<IProps> = memo(({ message, socket }) => {
   const isOwned = message.sender_id === userLogged?.id
   const isEdited = message.id === messageOnEdit?.id
   const [hover, setHover] = useState<boolean>(false)
+
+  useEffect(() => setHover(false), [])
 
   return (
     <div
