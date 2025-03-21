@@ -37,8 +37,8 @@ const SignInForm = () => {
   }
   return (
     <form
-      className={`relative box-border flex flex-col items-center gap-[20px] animate-fade-in rounded-[10px] border
-        border-gray-200/20 bg-blue-200 p-[20px]`}
+      className={`relative box-border shadow-md flex flex-col items-center gap-[20px] animate-fade-in rounded-[10px]
+        border border-gray-200/20 bg-blue-200 p-[20px]`}
       onSubmit={handleSubmit(SubmitHandler)}
     >
       <FormInput<IUserSignIn>

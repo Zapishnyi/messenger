@@ -37,8 +37,8 @@ const SingUpForm: FC = () => {
   return (
     <form
       onSubmit={handleSubmit(formSubmit)}
-      className={`relative box-border flex flex-col items-center gap-[20px] rounded-[10px] border border-gray-200/20
-        bg-blue-200 p-[20px]`}
+      className={`relative box-border animate-fade-in shadow-md flex flex-col items-center gap-[20px] rounded-[10px]
+        border border-gray-200/20 bg-blue-200 p-[20px]`}
     >
       <FormInput<IUserSignUp>
         register={register}
@@ -65,8 +65,8 @@ const SingUpForm: FC = () => {
       />
 
       <button
-        className={`flex w-full cursor-pointer items-center animate-fade-in justify-center rounded-md border
-          border-gray-300 bg-[#87a1e3] p-2 px-8 shadow-md duration-300 hover:bg-[#9cabd2] hover:transition`}
+        className={`flex w-full cursor-pointer shadow-md items-center animate-fade-in justify-center rounded-md border
+          border-gray-300 bg-[#87a1e3] p-2 px-8 duration-300 hover:bg-[#9cabd2] hover:transition`}
         disabled={!isValid}
       >
         Submit
