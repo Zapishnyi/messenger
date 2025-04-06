@@ -15,7 +15,6 @@ export default (): EnvConfigType => ({
   app: {
     port: Number(validate('APP_PORT')),
     host: validate('APP_HOST'),
-    ws_port: Number(validate('WS_PORT')),
     cors_port: Number(validate('CORS_PORT')),
   },
   jwt: {

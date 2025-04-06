@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "predeploy": "npm run build --mode gh_pages",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {

@@ -8,9 +8,9 @@ import { AppConfigType } from './configs/envConfigType';
 import { AppModule } from './modules/app.module';
 
 async function bootstrap() {
-  const httpApp = await NestFactory.create(AppModule);
-  const appEnvConfig = httpApp.get(ConfigService).get<AppConfigType>('app');
-  httpApp.enableCors({
+  const app = await NestFactory.create(AppModule);
+  const appEnvConfig = app.get(ConfigService).get<AppConfigType>('app');
+  app.enableCors({
     origin: '*',
     // origin: `http://${appEnvConfig?.host}:${appEnvConfig?.cors_port}`,
     credentials: true, // If cookies or auth headers are needed
@@ -30,8 +30,8 @@ async function bootstrap() {
     .build();
 
   // Creation of Swagger document
-  const SwaggerDocument = SwaggerModule.createDocument(httpApp, swaggerConfig);
-  SwaggerModule.setup('api-docs', httpApp, SwaggerDocument, {
+  const SwaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api-docs', app, SwaggerDocument, {
     swaggerOptions: {
       tagsSorter: 'alpha',
       docExpansion: 'list',
@@ -41,7 +41,7 @@ async function bootstrap() {
   });
 
   // Pipes
-  httpApp.useGlobalPipes(
+  app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
@@ -49,32 +49,17 @@ async function bootstrap() {
     }),
   );
 
+  app.useWebSocketAdapter(new IoAdapter(app));
   // Start HTTP server
-  await httpApp.listen(appEnvConfig?.port || 3000, async () => {
+  await app.listen(appEnvConfig?.port || 5000, async () => {
     Logger.log(
       `HTTP server started on: http://${appEnvConfig?.host}:${appEnvConfig?.port}`,
     );
     Logger.log(
-      `Swagger is available on: http://${appEnvConfig?.host}:${appEnvConfig?.port}/api-docs`,
+      `Websocket server started on: http://${appEnvConfig?.host}:${appEnvConfig?.port}`,
     );
-  });
-
-  // WS server initialization
-  const wsApp = await NestFactory.create(AppModule);
-  wsApp.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
-  wsApp.useWebSocketAdapter(new IoAdapter(wsApp));
-
-  // Start WS server
-
-  await wsApp.listen(appEnvConfig?.ws_port || 3001, () => {
     Logger.log(
-      `WebSocket server started on: http://${appEnvConfig?.host}:${appEnvConfig?.ws_port}`,
+      `Swagger is available on: http://${appEnvConfig?.host}:${appEnvConfig?.port}/api-docs`,
     );
   });
 }

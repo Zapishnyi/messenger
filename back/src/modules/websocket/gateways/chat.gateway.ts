@@ -26,14 +26,13 @@ import { FileEntity } from '../../../database/entities/file.entity';
 import { MessageEntity } from '../../../database/entities/message.entity';
 import { MessageEditReqDto } from '../../message/dto/req/message-edit.req.dto';
 import { MessageService } from '../../message/services/message.service';
-import { MessageDto } from '../dto/ws-message.dto';
 import { MessageEditDto } from '../dto/ws-message-edit.dto';
+import { MessageDto } from '../dto/ws-message.dto';
 
 @Injectable()
 @WebSocketGateway({
   cors: {
-    origin: '*', // Allow all origins (adjust this for production)
-    methods: ['GET', 'POST'],
+    origin: '*',
   },
 }) // Will use dynamic port from config
 export class ChatGateWay
@@ -53,7 +52,7 @@ export class ChatGateWay
     private readonly jwtWSConnectGuard: JwtWSConnectGuard,
     private readonly messageService: MessageService,
   ) {
-    this.port = this.configService.get<AppConfigType>('app')!.ws_port;
+    this.port = this.configService.get<AppConfigType>('app')!.port;
   }
 
   afterInit() {

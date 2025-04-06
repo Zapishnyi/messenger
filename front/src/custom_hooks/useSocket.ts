@@ -8,7 +8,7 @@ import { MessageActions } from '../redux/Slices/messageSlice'
 import { OnlineActions } from '../redux/Slices/onlineSlice'
 import { useAppDispatch, useAppSelector } from '../redux/store'
 
-const WS_SERVER_URL = import.meta.env.VITE_WS_BASE_URL
+const WS_SERVER_URL = import.meta.env.VITE_BACK_BASE_URL
 
 export const useSocket = (token: string | null): Socket | null => {
   const socketRef = useRef<Socket | null>(null)
