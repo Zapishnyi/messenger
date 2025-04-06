@@ -1,4 +1,4 @@
-export function SvgEditPen() {
+function SvgEditPen() {
   return (
     <svg
       viewBox="0 0 1024 1024"
@@ -18,3 +18,4 @@ export function SvgEditPen() {
     </svg>
   )
 }
+export default SvgEditPen

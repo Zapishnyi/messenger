@@ -1,6 +1,7 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 
 import { baseURL, urls } from '../constants/urls'
+import { errorHandle } from '../helpers/error-handle'
 import { navigateTo } from '../helpers/navigate-to'
 import IAuthTokens from '../interfaces/IAuthTokens'
 import { IHealth } from '../interfaces/IHealth'
@@ -40,7 +41,9 @@ interface IApiService {
   }
   user: {
     me: () => Promise<IUser>
-    all: () => Promise<IUser[]>
+    search: (query: string) => Promise<IUser[]>
+    add_contact: (id: string) => Promise<IUser>
+    delete_contact: (id: string) => Promise<IUser>
   }
   message: {
     all: (id: string) => Promise<IMessage[]>
@@ -61,7 +64,11 @@ export const api: IApiService = {
   },
   user: {
     me: () => axiosInstance.get(urls.user.me).then((response) => response.data),
-    all: () => axiosInstance.get(urls.user.all).then((response) => response.data),
+    search: (query) => axiosInstance.get(urls.user.search(query)).then((response) => response.data),
+    add_contact: (id) =>
+      axiosInstance.post(urls.user.add_contact(id)).then((response) => response.data),
+    delete_contact: (id) =>
+      axiosInstance.delete(urls.user.delete_contact(id)).then((response) => response.data),
   },
   message: {
     all: (id) => axiosInstance.get(urls.message.all(id)).then((response) => response.data),
@@ -91,24 +98,24 @@ axiosInstance.interceptors.response.use(
     if (error.status === 401) {
       if (
         !originalRequest._retry &&
-        storage.getRefreshToken() &&
+        // storage.getRefreshToken() &&
         originalRequest.url !== '/auth/refresh'
       ) {
         originalRequest._retry = true
         try {
+          console.log('Token refresh')
           const { tokens } = await api.auth.refresh()
           storage.setAccessToken(tokens.access)
           storage.setRefreshToken(tokens.refresh)
           return axiosInstance(originalRequest)
-        } catch (error) {
-          if ((error as AxiosError).response?.status === 401) {
-            storage.deleteTokens()
-            dispatch(UsersActions.setUser(null))
-            console.error('Token refresh failed with error:', error)
-            navigateTo('/auth/sign-in')
-          }
+        } catch (e) {
+          errorHandle(e)
         }
       } else {
+        console.log('Token refresh failed with 401 logout, navigate to sign in')
+        storage.deleteTokens()
+        dispatch(UsersActions.setLoggedUser(null))
+        console.error('Token refresh failed with error:', error)
         navigateTo('/auth/sign-in')
       }
     }

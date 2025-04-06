@@ -7,6 +7,7 @@ import { useAppSelector } from '../redux/store'
 import { storage } from '../services/localStorage.service'
 
 const AuthLayout: FC = () => {
+  console.log('.')
   const navigate = useNavigate()
   setNavigate(navigate)
 
@@ -16,7 +17,7 @@ const AuthLayout: FC = () => {
     const accessExist = !!storage.getAccessToken()
     const refreshExist = !!storage.getRefreshToken()
     if (accessExist && refreshExist && !usersLoadingState) {
-      navigate('/chat')
+      navigate('/contacts')
     }
   }, [])
 

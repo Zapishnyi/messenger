@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { helpersSlice } from './Slices/helpersSlice'
 import { messageSlice } from './Slices/messageSlice'
 import { onlineSlice } from './Slices/onlineSlice'
+import { searchSlice } from './Slices/searchSlice'
 import { usersSlice } from './Slices/usersSlice'
 
 export const store = configureStore({
@@ -10,6 +12,8 @@ export const store = configureStore({
     users: usersSlice.reducer,
     messages: messageSlice.reducer,
     online: onlineSlice.reducer,
+    search: searchSlice.reducer,
+    helpers: helpersSlice.reducer,
   },
 })
 

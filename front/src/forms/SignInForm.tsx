@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom'
 
 import BtnLoader from '../components/BtnLoader'
 import ErrorsContainer from '../components/ErrorsContainer/ErrorsContainer'
-import FormInput from '../components/FormInput/FormInput'
-import { InputFieldTypeEnum } from '../enums/input-field-type.enum'
+import FormInput from '../components/FormInput'
+import { InputFieldTypeEnum } from '../enums/InputFieldTtypeEnum'
 import { errorHandle } from '../helpers/error-handle'
 import IUserSignIn from '../interfaces/IUserSignIn'
 import { UsersActions } from '../redux/Slices/usersSlice'
@@ -27,8 +27,8 @@ const SignInForm = () => {
       const { tokens, user } = await api.auth.sign_in(credentials)
       storage.setAccessToken(tokens.access)
       storage.setRefreshToken(tokens.refresh)
-      dispatch(UsersActions.setUser(user))
-      navigate('/chat')
+      dispatch(UsersActions.setLoggedUser(user))
+      navigate('/contacts')
     } catch (e) {
       setErrorMassage(errorHandle(e).message)
     } finally {

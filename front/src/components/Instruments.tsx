@@ -1,19 +1,19 @@
-import { FC, useState } from 'react'
-import { Socket } from 'socket.io-client'
+import { FC, memo, useContext, useState } from 'react'
 
 import IMessage from '../interfaces/IMessage'
+import { SocketContext } from '../layouts/MainLayout'
 import { MessageActions } from '../redux/Slices/messageSlice'
 import { useAppDispatch, useAppSelector } from '../redux/store'
-import SvgDelete from './SvgDelete'
-import { SvgEditPen } from './SvgEditPen'
+import SvgDelete from './SvgComponents/SvgDelete'
+import SvgEditPen from './SvgComponents/SvgEditPen'
 interface IProps {
   edit: boolean
   message: IMessage
-  socket: Socket | null
   file_id?: string
 }
-const Instruments: FC<IProps> = ({ edit, message, file_id, socket }) => {
+const Instruments: FC<IProps> = memo(({ edit, message, file_id }) => {
   const { messageOnEdit } = useAppSelector((state) => state.messages)
+  const socket = useContext(SocketContext)
   const [checked, setChecked] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const deleteHandle = () => {
@@ -46,6 +46,6 @@ const Instruments: FC<IProps> = ({ edit, message, file_id, socket }) => {
       )}
     </div>
   )
-}
+})
 
 export default Instruments

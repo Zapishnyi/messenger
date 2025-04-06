@@ -1,6 +1,6 @@
 import { SVGProps } from 'react'
 
-export function SvgFile(props: SVGProps<SVGSVGElement>) {
+function SvgFile(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
@@ -10,3 +10,4 @@ export function SvgFile(props: SVGProps<SVGSVGElement>) {
     </svg>
   )
 }
+export default SvgFile

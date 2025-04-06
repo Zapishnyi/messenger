@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import SignInForm from '../forms/SignIn.form'
+import SignInForm from '../forms/SignInForm'
 
 const SignIn: FC = () => {
   return (

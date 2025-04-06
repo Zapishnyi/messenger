@@ -9,7 +9,9 @@ export const urls = {
   },
   user: {
     me: '/user/me',
-    all: '/user/all',
+    search: (query: string) => `user/search?${query}`,
+    add_contact: (id: string) => `/user/contact/${id}`,
+    delete_contact: (id: string) => `/user/contact/${id}`,
   },
   message: {
     all: (id: string) => `/message/${id}`,

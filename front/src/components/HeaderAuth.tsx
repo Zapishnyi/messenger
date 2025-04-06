@@ -6,6 +6,7 @@ const HeaderAuth = () => {
 
   const [isSignIn, setIsSignIn] = useState<boolean>(false)
   useEffect(() => {
+    console.log('.')
     setIsSignIn(location.pathname === '/auth/sign-in')
   }, [location.pathname])
   return (

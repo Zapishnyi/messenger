@@ -2,6 +2,7 @@ import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { MessageEntity } from '../../../../database/entities/message.entity';
+import IContact from '../../interfaces/IContact';
 
 export class UserBaseResDto {
   @ApiProperty({ description: 'User ID', format: 'uuid' })
@@ -48,7 +49,7 @@ export class UserBaseResDto {
     description: 'Contacts ID list of user',
     example: [],
   })
-  readonly contacts?: string[];
+  readonly contacts: IContact[];
 
   @Optional()
   @ApiProperty({

@@ -1,4 +1,4 @@
-export function SvgMessage() {
+function SvgMessage() {
   return (
     <svg viewBox="0 0 14 14">
       <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
@@ -8,3 +8,4 @@ export function SvgMessage() {
     </svg>
   )
 }
+export default SvgMessage

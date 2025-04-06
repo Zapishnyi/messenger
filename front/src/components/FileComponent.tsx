@@ -1,5 +1,4 @@
-import { FC, useRef } from 'react'
-import { Socket } from 'socket.io-client'
+import { FC, memo, useRef } from 'react'
 
 import { errorHandle } from '../helpers/error-handle'
 import IFile from '../interfaces/IFile'
@@ -7,15 +6,14 @@ import IMessage from '../interfaces/IMessage'
 import { useAppSelector } from '../redux/store'
 import { api } from '../services/messenger.api.service'
 import Instruments from './Instruments'
-import { SvgFile } from './SvgFile'
+import SvgFile from './SvgComponents/SvgFile'
 
 interface IProps {
   isOwned: boolean
   fileData: IFile
   message: IMessage
-  socket: Socket | null
 }
-const FileComponent: FC<IProps> = ({ fileData, isOwned, message, socket }) => {
+const FileComponent: FC<IProps> = memo(({ fileData, isOwned, message }) => {
   const downloadLinkRef = useRef<HTMLAnchorElement>(null)
   const { messageOnEdit } = useAppSelector((state) => state.messages)
   const fileDownloadHandle = async () => {
@@ -54,10 +52,10 @@ const FileComponent: FC<IProps> = ({ fileData, isOwned, message, socket }) => {
       </button>
       <a ref={downloadLinkRef} style={{ display: 'none' }}></a>
       {message?.id === messageOnEdit?.id && messageOnEdit && (
-        <Instruments edit={false} message={message} socket={socket} file_id={fileData.file_id} />
+        <Instruments edit={false} message={message} file_id={fileData.file_id} />
       )}
     </div>
   )
-}
+})
 
 export default FileComponent

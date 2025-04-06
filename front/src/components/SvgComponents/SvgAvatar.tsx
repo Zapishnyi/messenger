@@ -1,4 +1,4 @@
-export function SvgUserAvatar() {
+function SvgUserAvatar() {
   return (
     <svg viewBox="0 0 24 24" className="w-[22px]">
       <path
@@ -8,3 +8,4 @@ export function SvgUserAvatar() {
     </svg>
   )
 }
+export default SvgUserAvatar

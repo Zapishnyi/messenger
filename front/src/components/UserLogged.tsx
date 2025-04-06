@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, memo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { errorHandle } from '../helpers/error-handle'
@@ -10,7 +10,8 @@ import User from './User'
 interface IProps {
   nick_name: string
 }
-const UserLogged: FC<IProps> = ({ nick_name }) => {
+const UserLogged: FC<IProps> = memo(({ nick_name }) => {
+  console.log('.')
   const { me_online } = useAppSelector((state) => state.online)
   const [hover, setHover] = useState<boolean>(false)
   const navigate = useNavigate()
@@ -19,7 +20,7 @@ const UserLogged: FC<IProps> = ({ nick_name }) => {
     try {
       await api.auth.log_out()
       storage.deleteTokens()
-      dispatch(UsersActions.setUser(null))
+      dispatch(UsersActions.setLoggedUser(null))
       navigate('/auth/sign-in')
     } catch (e) {
       errorHandle(e)
@@ -52,6 +53,6 @@ const UserLogged: FC<IProps> = ({ nick_name }) => {
       )}
     </div>
   )
-}
+})
 
 export default UserLogged

@@ -49,6 +49,13 @@ export class JwtAccessGuard implements CanActivate {
 
         const userFound = await usersRepositoryEM.findOne({
           where: { id: user_id },
+          relations: ['contacts'],
+          select: {
+            contacts: {
+              id: true,
+              nick_name: true,
+            },
+          },
         });
         if (!userFound) {
           throw new UnauthorizedException();
@@ -59,7 +66,6 @@ export class JwtAccessGuard implements CanActivate {
         };
       },
     );
-
     return true;
   }
 }

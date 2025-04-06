@@ -1,28 +1,29 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, memo, useContext, useEffect, useRef, useState } from 'react'
 import { Socket } from 'socket.io-client'
 
 import { errorHandle } from '../helpers/error-handle'
 import IFile from '../interfaces/IFile'
+import { SocketContext } from '../layouts/MainLayout'
 import { MessageActions } from '../redux/Slices/messageSlice'
 import { useAppDispatch, useAppSelector } from '../redux/store'
 import { api } from '../services/messenger.api.service'
-import { SvgFile } from './SvgFile'
-interface IProps {
-  socket: Socket | null
-}
-const ChatInput: FC<IProps> = ({ socket }) => {
-  const { userLogged, contactChosen } = useAppSelector((state) => state.users)
+import SvgFile from './SvgComponents/SvgFile'
+
+const ChatInput: FC = memo(() => {
+  console.log('.')
   const dispatch = useAppDispatch()
+  const { userLogged, contactChosen } = useAppSelector((state) => state.users)
+  const { messageOnEdit, filesToDelete } = useAppSelector((state) => state.messages)
+  const { me_online } = useAppSelector((state) => state.online)
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [fileTooLarge, setFileTooLarge] = useState<string[] | null>()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const textInputRef = useRef<HTMLInputElement>(null)
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-  const { me_online } = useAppSelector((state) => state.online)
-  const { messageOnEdit, filesToDelete } = useAppSelector((state) => state.messages)
-  const [fileTooLarge, setFileTooLarge] = useState<string[] | null>()
+  const socket = useContext<Socket | null>(SocketContext)
 
   useEffect(() => {
     if (textInputRef.current) textInputRef.current.value = ''
-    setSelectedFiles([])
+    if (selectedFiles.length) setSelectedFiles([])
   }, [contactChosen])
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const ChatInput: FC<IProps> = ({ socket }) => {
       if (textInputRef.current) textInputRef.current.value = messageOnEdit.content
     }
   }, [messageOnEdit])
+
   const sendMessageHandle = async () => {
     if (messageOnEdit) {
       socket?.emit('edit_message', {
@@ -63,7 +65,7 @@ const ChatInput: FC<IProps> = ({ socket }) => {
             files: filesStore,
             created: new Date().toString(),
           }
-
+          console.log(messageData)
           socket.emit('send_message', messageData)
           if (textInputRef.current) textInputRef.current.value = ''
           setSelectedFiles([])
@@ -154,6 +156,6 @@ const ChatInput: FC<IProps> = ({ socket }) => {
       </button>
     </div>
   )
-}
+})
 
 export default ChatInput

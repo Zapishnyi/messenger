@@ -10,7 +10,7 @@ const ErrorPage: FC = () => {
   const errors = location.state
 
   const clickHandle = () => {
-    navigate('/chat')
+    navigate('/contacts')
   }
   return (
     <div className={'relative flex h-[100dvh] w-[100vw] flex-col items-center justify-center'}>

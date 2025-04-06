@@ -7,40 +7,75 @@ import {
 } from '@reduxjs/toolkit'
 
 import { errorHandle } from '../../helpers/error-handle'
+import { objectToParams } from '../../helpers/object-to-params'
+import { toUaTimeString } from '../../helpers/to-ua-time-format'
+import IContact from '../../interfaces/IContact'
+import IQuery from '../../interfaces/IQuery'
 import IUser from '../../interfaces/IUser'
 import { api } from '../../services/messenger.api.service'
+import { RootState } from '../store'
 
 interface IInitial {
   userLogged: IUser | null
-  contactChosen: IUser | null
+  userLoggedContacts: IContact[]
+  contactChosen: IContact | null
   users: IUser[]
   usersLoadingState: boolean
 }
 
 const initialState: IInitial = {
   userLogged: null,
+  userLoggedContacts: [],
   contactChosen: null,
   users: [],
   usersLoadingState: false,
 }
-const getAllUsers = createAsyncThunk('users/getAllUsers', async (_, thunkAPI) => {
+const getUsersByQuery = createAsyncThunk(
+  'users/getUsersByQuery',
+  async (query: IQuery, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState
+    const { limit, page, sort, search } = state.search.query
+    try {
+      const users = await api.user.search(
+        objectToParams(query as unknown as Record<string, string | number | boolean>),
+      )
+      if (
+        sort === query.sort &&
+        limit === query.limit &&
+        search === query.search &&
+        page === --query.page
+      ) {
+        return thunkAPI.fulfillWithValue([
+          ...state.users.users,
+          ...users.map((e) => ({
+            ...e,
+            last_visit: e.last_visit ? toUaTimeString(e.last_visit) : 'null',
+          })),
+        ])
+      } else {
+        return thunkAPI.fulfillWithValue(
+          users.map((e) => ({
+            ...e,
+            last_visit: e.last_visit ? toUaTimeString(e.last_visit) : 'null',
+          })),
+        )
+      }
+    } catch (e) {
+      const error = errorHandle(e)
+      return thunkAPI.rejectWithValue(error.message)
+    } finally {
+      thunkAPI.dispatch(UsersActions.setLoadingState(false))
+    }
+  },
+)
+
+const getMe = createAsyncThunk('users/getMe', async (_, thunkAPI) => {
   try {
-    const users = await api.user.all()
-    return thunkAPI.fulfillWithValue(
-      users.map((e) => ({
-        ...e,
-        last_visit: e.last_visit
-          ? new Date(e.last_visit).toLocaleString('uk-UA', {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              timeZone: 'Europe/Kyiv',
-            })
-          : 'null',
-      })),
-    )
+    const me = await api.user.me()
+    return thunkAPI.fulfillWithValue({
+      ...me,
+      last_visit: me.last_visit ? toUaTimeString(me.last_visit) : 'null',
+    })
   } catch (e) {
     const error = errorHandle(e)
     return thunkAPI.rejectWithValue(error.message)
@@ -49,21 +84,16 @@ const getAllUsers = createAsyncThunk('users/getAllUsers', async (_, thunkAPI) =>
   }
 })
 
-const getMe = createAsyncThunk('users/getMe', async (_, thunkAPI) => {
+const contactToggle = createAsyncThunk('users/contactToggle', async (user_id: string, thunkAPI) => {
+  const state = thunkAPI.getState() as RootState
+  const isInContacts = state.users.userLoggedContacts.some((c) => c.id === user_id)
   try {
-    const me = await api.user.me()
+    const me = isInContacts
+      ? await api.user.delete_contact(user_id)
+      : await api.user.add_contact(user_id)
     return thunkAPI.fulfillWithValue({
       ...me,
-      last_visit: me.last_visit
-        ? new Date(me.last_visit).toLocaleString('uk-UA', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZone: 'Europe/Kyiv',
-          })
-        : 'null',
+      last_visit: me.last_visit ? toUaTimeString(me.last_visit) : 'null',
     })
   } catch (e) {
     const error = errorHandle(e)
@@ -77,10 +107,21 @@ export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<IUser | null>) => {
-      state.userLogged = action.payload
+    setLoggedUser: (state, action: PayloadAction<IUser | null>) => {
+      if (action.payload) {
+        const { contacts, ...rest } = action.payload
+        state.userLogged =
+          JSON.stringify(state.userLogged) === JSON.stringify(rest) ? state.userLogged : rest
+        state.userLoggedContacts = contacts || []
+      } else {
+        state.userLogged = null
+        state.userLoggedContacts = []
+      }
     },
-    setContactChosen: (state, action: PayloadAction<IUser | null>) => {
+    clearUsers: (state) => {
+      state.users = []
+    },
+    setContactChosen: (state, action: PayloadAction<IContact | null>) => {
       state.contactChosen = action.payload
     },
     setLoadingState: (state, action: PayloadAction<boolean>) => {
@@ -89,16 +130,25 @@ export const usersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAllUsers.fulfilled, (state, action) => {
+      .addCase(getUsersByQuery.fulfilled, (state, action) => {
         state.users = action.payload
       })
-      .addCase(getMe.fulfilled, (state, action) => {
-        state.userLogged = action.payload
+      .addCase(contactToggle.fulfilled, (state, action) => {
+        const { contacts, ...rest } = action.payload
+        state.userLogged =
+          JSON.stringify(state.userLogged) === JSON.stringify(rest) ? state.userLogged : rest
+        state.userLoggedContacts = contacts || []
       })
-      .addMatcher(isRejected(getAllUsers, getMe), (state, action) => {
+      .addCase(getMe.fulfilled, (state, action) => {
+        const { contacts, ...rest } = action.payload
+        state.userLogged =
+          JSON.stringify(state.userLogged) === JSON.stringify(rest) ? state.userLogged : rest
+        state.userLoggedContacts = contacts || []
+      })
+      .addMatcher(isRejected(getUsersByQuery, getMe, contactToggle), (state, action) => {
         console.error('Users receive sequence failed with error:', action.payload)
       })
-      .addMatcher(isPending(getAllUsers, getMe), (state) => {
+      .addMatcher(isPending(getUsersByQuery, getMe, contactToggle), (state) => {
         state.usersLoadingState = true
       })
   },
@@ -106,6 +156,7 @@ export const usersSlice = createSlice({
 
 export const UsersActions = {
   ...usersSlice.actions,
-  getAllUsers,
+  getUsersByQuery,
+  contactToggle,
   getMe,
 }

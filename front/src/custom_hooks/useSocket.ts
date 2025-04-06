@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { io, Socket } from 'socket.io-client'
 
+import IContact from '../interfaces/IContact'
 import IMessage from '../interfaces/IMessage'
 import IUser from '../interfaces/IUser'
 import { MessageActions } from '../redux/Slices/messageSlice'
@@ -10,11 +11,11 @@ import { useAppDispatch, useAppSelector } from '../redux/store'
 const WS_SERVER_URL = import.meta.env.VITE_WS_BASE_URL
 
 export const useSocket = (token: string | null): Socket | null => {
-  const [socket, setSocket] = useState<Socket | null>(null)
+  const socketRef = useRef<Socket | null>(null)
   const dispatch = useAppDispatch()
   const { contactChosen, userLogged } = useAppSelector((state) => state.users)
 
-  const contactChosenRef = useRef<IUser>(contactChosen)
+  const contactChosenRef = useRef<IContact>(contactChosen)
   const userLoggedRef = useRef<IUser>(userLogged)
 
   useEffect(() => {
@@ -25,35 +26,34 @@ export const useSocket = (token: string | null): Socket | null => {
   useEffect(() => {
     if (!token) return
 
-    const newSocket = io(WS_SERVER_URL, {
+    socketRef.current = io(WS_SERVER_URL, {
       transports: ['websocket'],
       query: {
         token,
       },
     })
 
-    newSocket.on('connect', () => {
+    socketRef.current.on('connect', () => {
       dispatch(OnlineActions.setMeOnline(true))
     })
 
-    newSocket.on('disconnect', () => {
+    socketRef.current.on('disconnect', () => {
       dispatch(OnlineActions.setMeOnline(false))
       dispatch(OnlineActions.setUsersOnline([]))
     })
-    setSocket(newSocket)
 
-    newSocket.on('online-users', (users: string[]) => {
+    socketRef.current.on('online-users', (users: string[]) => {
       dispatch(OnlineActions.setUsersOnline(users))
     })
 
-    newSocket.on('error', (error: { message: string }) => {
+    socketRef.current.on('error', (error: { message: string }) => {
       console.error('Websocket error:', error.message)
       //   navigateTo('/error', {
       //     state: [error.message],
       //   })
     })
 
-    newSocket.on('receive_message', (message: IMessage) => {
+    socketRef.current.on('receive_message', (message: IMessage) => {
       if (
         contactChosenRef.current?.id === message.sender_id ||
         userLoggedRef?.current?.id === message.sender_id
@@ -65,7 +65,7 @@ export const useSocket = (token: string | null): Socket | null => {
       }
     })
 
-    newSocket.on('message_edited', (message: IMessage) => {
+    socketRef.current.on('message_edited', (message: IMessage) => {
       if (
         contactChosenRef.current?.id === message.sender_id ||
         userLoggedRef?.current?.id === message.sender_id
@@ -74,7 +74,7 @@ export const useSocket = (token: string | null): Socket | null => {
       }
     })
 
-    newSocket.on('message_deleted', (message: IMessage) => {
+    socketRef.current.on('message_deleted', (message: IMessage) => {
       if (
         contactChosenRef.current?.id === message.sender_id ||
         userLoggedRef?.current?.id === message.sender_id
@@ -87,9 +87,9 @@ export const useSocket = (token: string | null): Socket | null => {
     })
 
     return () => {
-      newSocket.disconnect()
+      socketRef.current?.disconnect()
     }
   }, [token])
 
-  return socket
+  return socketRef.current
 }

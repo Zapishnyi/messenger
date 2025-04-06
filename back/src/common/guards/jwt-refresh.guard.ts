@@ -2,7 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 
@@ -27,14 +27,11 @@ export class JwtRefreshGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const refresh = request.get('Authorization')?.split(' ').pop();
 
-    if (!refresh) {
-      throw new UnauthorizedException();
-    }
-
     const { user_id, device } = await this.tokenService.verifyToken(
       refresh,
       TokenTypeEnum.REFRESH,
     );
+
     if (!user_id) {
       throw new UnauthorizedException();
     }
@@ -48,19 +45,25 @@ export class JwtRefreshGuard implements CanActivate {
           throw new UnauthorizedException();
         }
 
-        const user = await userRepositoryEM.findOneBy({
-          id: user_id,
+        const userFound = await userRepositoryEM.findOne({
+          where: { id: user_id },
+          relations: ['contacts'],
+          select: {
+            contacts: {
+              id: true,
+              nick_name: true,
+            },
+          },
         });
-        if (!user) {
+        if (!userFound) {
           throw new UnauthorizedException();
         }
         request.user_data = {
-          user,
+          user: userFound,
           device,
         };
       },
     );
-
     return true;
   }
 }

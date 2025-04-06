@@ -1,17 +1,17 @@
-import React from 'react'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
 import AuthLayout from '../layouts/AuthLayout'
 import MainLayout from '../layouts/MainLayout'
-import Chat from '../pages/Chat'
+import Contacts from '../pages/Contacts'
 import ErrorPage from '../pages/ErrorPage'
 import SignIn from '../pages/SignIn'
 import SingUp from '../pages/SingUp'
+import Users from '../pages/Users'
 
 export const routerConfig = createHashRouter([
   {
     index: true,
-    element: <Navigate to={'/chat'} />,
+    element: <Navigate to={'/contacts'} />,
   },
   {
     path: 'auth',
@@ -32,8 +32,12 @@ export const routerConfig = createHashRouter([
     element: <MainLayout />,
     children: [
       {
-        path: 'chat',
-        element: <Chat />,
+        path: 'contacts',
+        element: <Contacts />,
+      },
+      {
+        path: 'users',
+        element: <Users />,
       },
     ],
   },

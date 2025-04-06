@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
-import { InputFieldTypeEnum } from '../../enums/input-field-type.enum'
-import { SvgEyeClosed } from './SvgEyeClosed'
-import { SvgEyeOpen } from './SvgEyeOpen'
+import { InputFieldTypeEnum } from '../enums/InputFieldTtypeEnum'
+import SvgEyeClosed from './SvgComponents/SvgEyeClosed'
+import SvgEyeOpen from './SvgComponents/SvgEyeOpen'
 
 interface IProps<T extends FieldValues> {
   register: UseFormRegister<T>

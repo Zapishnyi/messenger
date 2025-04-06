@@ -1,5 +1,4 @@
 import { FC, memo, useEffect, useState } from 'react'
-import { Socket } from 'socket.io-client'
 
 import IMessage from '../interfaces/IMessage'
 import { useAppSelector } from '../redux/store'
@@ -7,9 +6,8 @@ import FileComponent from './FileComponent'
 import Instruments from './Instruments'
 interface IProps {
   message: IMessage
-  socket: Socket | null
 }
-const Message: FC<IProps> = memo(({ message, socket }) => {
+const Message: FC<IProps> = memo(({ message }) => {
   const { userLogged, contactChosen } = useAppSelector((state) => state.users)
   const { messageOnEdit } = useAppSelector((state) => state.messages)
   const isOwned = message.sender_id === userLogged?.id
@@ -36,12 +34,12 @@ const Message: FC<IProps> = memo(({ message, socket }) => {
           className={`${isOwned ? 'self-end ' : 'self-start'} w-fit min-w-[50px]`}
         >{`${isOwned ? 'You: ' : contactChosen?.nick_name + ': '}${message.content}`}</p>
         {hover && message.sender_id === userLogged?.id && !messageOnEdit && (
-          <Instruments edit={true} message={message} socket={socket} />
+          <Instruments edit={true} message={message} />
         )}
       </div>
       {message.files.length > 0 &&
         message.files.map((f, i) => (
-          <FileComponent key={i} isOwned={isOwned} fileData={f} message={message} socket={socket} />
+          <FileComponent key={i} isOwned={isOwned} fileData={f} message={message} />
         ))}
     </div>
   )
