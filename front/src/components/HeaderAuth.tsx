@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 const HeaderAuth = () => {
+  console.log('.')
   const navigate = useNavigate()
   const location = useLocation()
 
   const [isSignIn, setIsSignIn] = useState<boolean>(false)
-  useEffect(() => {
-    console.log('.')
+  useLayoutEffect(() => {
     setIsSignIn(location.pathname === '/auth/sign-in')
   }, [location.pathname])
   return (

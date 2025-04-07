@@ -16,6 +16,7 @@ const Users: FC = () => {
       onBlur={() => dispatch(HelpersActions.setUsersOnFocus(false))}
       tabIndex={-1}
     >
+      <p className={'text-center '}>Users</p>
       {!!users.length &&
         users
           .filter((user) => user.id !== userLogged?.id)

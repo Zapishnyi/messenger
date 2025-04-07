@@ -4,13 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "predeploy": "npm run build --mode gh_pages",
-    "deploy": "gh-pages -d dist"
+  "dev": "vite",
+  "build": "tsc -b && vite build",
+  "build:gh": "tsc -b && vite build --mode gh_pages",
+  "lint": "eslint .",
+  "preview": "vite preview",
+  "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+  "predeploy": "npm run build:gh",
+  "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",

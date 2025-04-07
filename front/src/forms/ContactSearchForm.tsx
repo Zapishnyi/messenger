@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDebounce } from 'use-debounce'
 
+import SvgCross from '../components/SvgComponents/SvgCross'
 import SvgMagnifyingGlassBtn from '../components/SvgComponents/SvgMagnifyingGlassBtn'
 import { SearchActions } from '../redux/Slices/searchSlice'
 import { UsersActions } from '../redux/Slices/usersSlice'
@@ -20,7 +21,6 @@ const ContactSearchForm: FC = memo(() => {
   const [isInputOnFocus, setInputOnFocus] = useState<boolean>(false)
   useEffect(() => {
     console.log('search happened', `search: ${debounceSearch}`, isInputOnFocus)
-
     dispatch(UsersActions.getUsersByQuery({ ...query, search: debounceSearch }))
     dispatch(SearchActions.setQuery({ ...query, search: debounceSearch }))
     if (!location.pathname.includes('/users') && isInputOnFocus) {
@@ -35,6 +35,12 @@ const ContactSearchForm: FC = memo(() => {
   }, [debounceSearch, isInputOnFocus])
 
   const searchHandle = () => {}
+
+  const toContacts = () => {
+    if (location.pathname.includes('/users')) {
+      navigate('/contacts')
+    }
+  }
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
@@ -58,10 +64,19 @@ const ContactSearchForm: FC = memo(() => {
         className={'w-full h-full border-1 px-[10px] rounded-2xl bg-[#ffffff] border-[#959595] '}
       />
       <div
-        className={`absolute top-1/2 right-[12px] -translate-y-1/2 cursor-pointer hover:scale-110 transition
-          duration-[0.3s]`}
+        className={`absolute top-1/2 right-[12px] w-[20px] -translate-y-1/2 ${ location.pathname.includes('/users') &&
+          'cursor-pointer hover:scale-110 transition duration-[0.3s]' } `}
+        onClick={toContacts}
       >
-        <SvgMagnifyingGlassBtn />
+        {location.pathname.includes('/users') ? (
+          <div className={'animate-fade-in'}>
+            <SvgCross />
+          </div>
+        ) : (
+          <div className={'animate-fade-in'}>
+            <SvgMagnifyingGlassBtn />
+          </div>
+        )}
       </div>
     </form>
   )

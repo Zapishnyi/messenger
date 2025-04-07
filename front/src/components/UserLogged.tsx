@@ -21,6 +21,7 @@ const UserLogged: FC<IProps> = memo(({ nick_name }) => {
       await api.auth.log_out()
       storage.deleteTokens()
       dispatch(UsersActions.setLoggedUser(null))
+      dispatch(UsersActions.setContactChosen(null))
       navigate('/auth/sign-in')
     } catch (e) {
       errorHandle(e)

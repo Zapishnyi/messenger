@@ -109,7 +109,7 @@ const ChatInput: FC = memo(() => {
       }
     >
       <input
-        disabled={!me_online}
+        disabled={!me_online || !contactChosen}
         ref={textInputRef}
         type="text"
         placeholder="Please type your message here..."
@@ -117,7 +117,7 @@ const ChatInput: FC = memo(() => {
       />
 
       <input
-        disabled={!me_online}
+        disabled={!me_online || !contactChosen}
         ref={fileInputRef}
         type="file"
         className="hidden"
@@ -126,7 +126,7 @@ const ChatInput: FC = memo(() => {
       />
       <div className={' h-full w-[100px] flex flex-grow-0'}>
         <button
-          disabled={!me_online}
+          disabled={!me_online || !contactChosen}
           onClick={attachFileHandle}
           className={
             'flex h-full w-full cursor-pointer items-center justify-center p-[5px] hover:bg-gray-100'
@@ -147,7 +147,7 @@ const ChatInput: FC = memo(() => {
       </div>
 
       <button
-        disabled={!me_online}
+        disabled={!me_online || !contactChosen}
         onClick={sendMessageHandle}
         className={`flex h-full w-[100px] flex-grow-0 cursor-pointer items-center justify-center p-[5px]
           hover:bg-gray-100`}
