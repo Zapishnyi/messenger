@@ -7,6 +7,7 @@ import {
 } from '@reduxjs/toolkit'
 
 import { errorHandle } from '../../helpers/error-handle'
+import { navigateTo } from '../../helpers/navigate-to'
 import { objectToParams } from '../../helpers/object-to-params'
 import { toUaTimeString } from '../../helpers/to-ua-time-format'
 import IContact from '../../interfaces/IContact'
@@ -21,6 +22,7 @@ interface IInitial {
   contactChosen: IContact | null
   users: IUser[]
   usersLoadingState: boolean
+  userLoggedLoadingState: boolean
 }
 
 const initialState: IInitial = {
@@ -29,6 +31,7 @@ const initialState: IInitial = {
   contactChosen: null,
   users: [],
   usersLoadingState: false,
+  userLoggedLoadingState: false,
 }
 const getUsersByQuery = createAsyncThunk(
   'users/getUsersByQuery',
@@ -64,7 +67,7 @@ const getUsersByQuery = createAsyncThunk(
       const error = errorHandle(e)
       return thunkAPI.rejectWithValue(error.message)
     } finally {
-      thunkAPI.dispatch(UsersActions.setLoadingState(false))
+      thunkAPI.dispatch(UsersActions.setUsersLoadingState(false))
     }
   },
 )
@@ -72,6 +75,9 @@ const getUsersByQuery = createAsyncThunk(
 const getMe = createAsyncThunk('users/getMe', async (_, thunkAPI) => {
   try {
     const me = await api.user.me()
+    if (!me.contacts?.length) {
+      navigateTo('/users')
+    }
     return thunkAPI.fulfillWithValue({
       ...me,
       last_visit: me.last_visit ? toUaTimeString(me.last_visit) : 'null',
@@ -80,7 +86,7 @@ const getMe = createAsyncThunk('users/getMe', async (_, thunkAPI) => {
     const error = errorHandle(e)
     return thunkAPI.rejectWithValue(error.message)
   } finally {
-    thunkAPI.dispatch(UsersActions.setLoadingState(false))
+    thunkAPI.dispatch(UsersActions.setUserLoggedLoadingState(false))
   }
 })
 
@@ -99,7 +105,7 @@ const contactToggle = createAsyncThunk('users/contactToggle', async (user_id: st
     const error = errorHandle(e)
     return thunkAPI.rejectWithValue(error.message)
   } finally {
-    thunkAPI.dispatch(UsersActions.setLoadingState(false))
+    // thunkAPI.dispatch(UsersActions.setUserLoggedLoadingState(false))
   }
 })
 
@@ -124,8 +130,11 @@ export const usersSlice = createSlice({
     setContactChosen: (state, action: PayloadAction<IContact | null>) => {
       state.contactChosen = action.payload
     },
-    setLoadingState: (state, action: PayloadAction<boolean>) => {
+    setUsersLoadingState: (state, action: PayloadAction<boolean>) => {
       state.usersLoadingState = action.payload
+    },
+    setUserLoggedLoadingState: (state, action: PayloadAction<boolean>) => {
+      state.userLoggedLoadingState = action.payload
     },
   },
   extraReducers: (builder) => {
@@ -148,8 +157,11 @@ export const usersSlice = createSlice({
       .addMatcher(isRejected(getUsersByQuery, getMe, contactToggle), (state, action) => {
         console.error('Users receive sequence failed with error:', action.payload)
       })
-      .addMatcher(isPending(getUsersByQuery, getMe, contactToggle), (state) => {
+      .addMatcher(isPending(getUsersByQuery), (state) => {
         state.usersLoadingState = true
+      })
+      .addMatcher(isPending(getMe), (state) => {
+        state.userLoggedLoadingState = true
       })
   },
 })
