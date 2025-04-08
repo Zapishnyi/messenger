@@ -103,7 +103,7 @@ axiosInstance.interceptors.response.use(
       ) {
         originalRequest._retry = true
         try {
-          console.log('Token refresh')
+          // console.log('Token refresh')
           const { tokens } = await api.auth.refresh()
           storage.setAccessToken(tokens.access)
           storage.setRefreshToken(tokens.refresh)
@@ -112,7 +112,7 @@ axiosInstance.interceptors.response.use(
           errorHandle(e)
         }
       } else {
-        console.log('Token refresh failed with 401 logout, navigate to sign in')
+        // console.log('Token refresh failed with 401 logout, navigate to sign in')
         storage.deleteTokens()
         dispatch(UsersActions.setLoggedUser(null))
         console.error('Token refresh failed with error:', error)

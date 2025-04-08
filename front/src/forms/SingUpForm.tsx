@@ -17,10 +17,15 @@ const SingUpForm: FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<IUserSignUp>({
-    mode: 'all',
+    mode: 'onSubmit',
     resolver: joiResolver(userSingUpValidator),
+    defaultValues: {
+      email: '',
+      password: '',
+      nick_name: '',
+    },
   })
   const [errorMessage, setErrorMassage] = useState<string[] | null>(null)
   const formSubmit = async (formData: IUserSignUp) => {
@@ -37,9 +42,11 @@ const SingUpForm: FC = () => {
   return (
     <form
       onSubmit={handleSubmit(formSubmit)}
-      className={`relative box-border animate-fade-in shadow-md flex flex-col items-center gap-[20px] rounded-[10px]
-        border border-gray-200/20 bg-blue-200 p-[20px]`}
+      className={
+        'relative box-border animate-fade-in flex flex-col items-center gap-[20px] rounded-[10px] '
+      }
     >
+      <p className={'text-2xl font-bold text-[#313b54]'}>Sign Up</p>
       <FormInput<IUserSignUp>
         register={register}
         field_name={'nick_name'}
@@ -63,14 +70,25 @@ const SingUpForm: FC = () => {
         field_type={InputFieldTypeEnum.PASSWORD}
         error={errors.password?.message}
       />
+      <div className={'flex w-full items-center justify-center gap-2'}>
+        <button
+          type="button"
+          className={`flex w-full cursor-pointer shadow-md items-center animate-fade-in justify-center rounded-md border
+            border-gray-300 bg-[#87a1e3] py-2 duration-300 hover:bg-[#9cabd2]
+            hover:shadow-[0_5px_10px_2px_rgba(99,102,241,0.7)] hover:transition`}
+          onClick={() => navigate('/auth/sign-in')}
+        >
+          Sign-in
+        </button>
+        <button
+          className={`flex w-full cursor-pointer shadow-md items-center animate-fade-in justify-center rounded-md border
+            border-gray-300 bg-[#87a1e3] py-2 duration-300 hover:bg-[#9cabd2]
+            hover:shadow-[0_5px_10px_2px_rgba(99,102,241,0.7)] hover:transition`}
+        >
+          Submit
+        </button>
+      </div>
 
-      <button
-        className={`flex w-full cursor-pointer shadow-md items-center animate-fade-in justify-center rounded-md border
-          border-gray-300 bg-[#87a1e3] p-2 px-8 duration-300 hover:bg-[#9cabd2] hover:transition`}
-        disabled={!isValid}
-      >
-        Submit
-      </button>
       {errorMessage?.length && <ErrorsContainer errors={errorMessage} />}
     </form>
   )

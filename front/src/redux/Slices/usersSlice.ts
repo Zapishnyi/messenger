@@ -75,7 +75,7 @@ const getUsersByQuery = createAsyncThunk(
 const getMe = createAsyncThunk('users/getMe', async (_, thunkAPI) => {
   try {
     const me = await api.user.me()
-    console.log('me', me)
+
     if (!me.contacts?.length) {
       navigateTo('/users')
     }

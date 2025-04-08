@@ -45,9 +45,8 @@ const FormInput = <T extends FieldValues>({
     <label className={'select-non relative flex flex-col text-left'}>
       {field_label}:{' '}
       <input
-        className={
-          'w-[400px] rounded-md border border-gray-200/20 bg-[#ecf2fe] p-[5px] px-[10px] text-lg'
-        }
+        className={`max-w-[400px] w-[90vw] rounded-md border shadow-md
+          ${error ? 'border-[#bd2727]' : 'border-[#bbbfc9]'} bg-[#ecf2fe] p-[5px] px-[10px] text-lg`}
         onKeyDown={eRestrictHandle}
         type={type}
         autoComplete="on"
@@ -59,7 +58,7 @@ const FormInput = <T extends FieldValues>({
       {!!error && (
         <p
           className={
-            ":before:content-['*'] absolute right-0 bottom-[37px] w-4/5 text-right text-red-600"
+            "before:content-['*'] absolute right-0 bottom-[40px] w-4/5 text-right text-red-600"
           }
         >
           {error}

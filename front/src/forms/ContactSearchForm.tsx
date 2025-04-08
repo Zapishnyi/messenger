@@ -20,11 +20,9 @@ const ContactSearchForm: FC = memo(() => {
   const navigate = useNavigate()
   const [isInputOnFocus, setInputOnFocus] = useState<boolean>(false)
   useEffect(() => {
-    console.log('search happened', `search: ${debounceSearch}`, isInputOnFocus)
     dispatch(UsersActions.getUsersByQuery({ ...query, search: debounceSearch }))
     dispatch(SearchActions.setQuery({ ...query, search: debounceSearch }))
     if (!location.pathname.includes('/users') && isInputOnFocus) {
-      console.log('users')
       navigate('/users')
     }
     console.log('isUsersOnFocus', isUsersOnFocus)

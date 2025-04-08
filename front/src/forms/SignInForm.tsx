@@ -36,10 +36,12 @@ const SignInForm = () => {
   }
   return (
     <form
-      className={`relative box-border shadow-md flex flex-col items-center gap-[20px] animate-fade-in rounded-[10px]
-        border border-gray-200/20 bg-blue-200 p-[20px]`}
+      className={
+        'relative box-border animate-fade-in flex flex-col items-center gap-[20px] rounded-[10px] '
+      }
       onSubmit={handleSubmit(SubmitHandler)}
     >
+      <p className={'text-2xl font-bold text-[#313b54]'}>Sign In</p>
       <FormInput<IUserSignIn>
         register={register}
         field_name={'email'}
@@ -52,13 +54,26 @@ const SignInForm = () => {
         field_label={'Password'}
         field_type={InputFieldTypeEnum.PASSWORD}
       />
-      <button
-        className={`relative flex w-full cursor-pointer items-center justify-center rounded-md border border-gray-300
-          bg-[#87a1e3] p-2 px-8 shadow-md duration-300 hover:bg-[#9cabd2] hover:transition`}
-      >
-        Login
-        {isPending && <BtnLoader loadingState={isPending} />}
-      </button>
+      <div className={'flex w-full items-center justify-center gap-2'}>
+        <button
+          type="button"
+          className={`flex w-full cursor-pointer shadow-md items-center animate-fade-in justify-center rounded-md border
+            border-gray-300 bg-[#87a1e3] p-2 duration-300 hover:bg-[#9cabd2]
+            hover:shadow-[0_5px_10px_2px_rgba(99,102,241,0.7)] hover:transition`}
+          onClick={() => navigate('/auth/sign-up')}
+        >
+          Sign-up
+        </button>
+        <button
+          className={`relative flex w-full cursor-pointer items-center justify-center rounded-md border border-gray-300
+            bg-[#87a1e3] p-2 shadow-md duration-300 hover:bg-[#9cabd2]
+            hover:shadow-[0_5px_10px_2px_rgba(99,102,241,0.7)] hover:transition`}
+        >
+          Login
+          {isPending && <BtnLoader loadingState={isPending} />}
+        </button>
+      </div>
+
       {errorMessage?.length && <ErrorsContainer errors={errorMessage} />}
     </form>
   )
