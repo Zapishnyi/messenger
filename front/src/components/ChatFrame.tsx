@@ -4,7 +4,7 @@ import { useAppSelector } from '../redux/store'
 import Message from './Message'
 
 const ChatFrame: FC = memo(() => {
-  console.log('.')
+  // console.log('.')
   const { messages } = useAppSelector((state) => state.messages)
   const firsRenderRef = useRef<boolean>(true)
   const chatFrameRef = useRef<HTMLDivElement>(null)

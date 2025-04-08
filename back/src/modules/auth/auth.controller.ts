@@ -46,7 +46,7 @@ export class AuthController {
     @Req() request: Request,
   ): Promise<AuthResDto> {
     const [user, tokens] = await this.authService.signIn(dto, request);
-    return { tokens, user: this.userPresenter.toResponseDtoFromEntity(user) };
+    return { tokens, user: this.userPresenter.toMeResponseDtoFromEntity(user) };
   }
 
   // Sing up ---------------------------------------------
@@ -99,7 +99,7 @@ export class AuthController {
     const tokens = await this.authService.refresh(userData);
     return {
       tokens,
-      user: this.userPresenter.toResponseDtoFromEntity(userData.user),
+      user: this.userPresenter.toMeResponseDtoFromEntity(userData.user),
     };
   }
 

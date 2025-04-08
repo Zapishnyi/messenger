@@ -10,7 +10,7 @@ import { api } from '../services/messenger.api.service'
 import SvgFile from './SvgComponents/SvgFile'
 
 const ChatInput: FC = memo(() => {
-  console.log('.')
+  // console.log('.')
   const dispatch = useAppDispatch()
   const { userLogged, contactChosen } = useAppSelector((state) => state.users)
   const { messageOnEdit, filesToDelete } = useAppSelector((state) => state.messages)

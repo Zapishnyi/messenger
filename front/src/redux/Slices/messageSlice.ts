@@ -50,6 +50,10 @@ export const messageSlice = createSlice({
     addMessage: (state, action: PayloadAction<IMessage>) => {
       state.messages = [...state.messages, action.payload]
     },
+    clearMessages: (state) => {
+      state.messages = []
+      state.unreadMessages = []
+    },
 
     setLoadingState: (state, action: PayloadAction<boolean>) => {
       state.loadingState = action.payload

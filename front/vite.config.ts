@@ -4,8 +4,8 @@ import { defineConfig, loadEnv } from 'vite'
 
 // This function gives you access to env vars
 export default defineConfig(({ mode }) => {
-  // Load env file based on `mode` (e.g., 'development' or 'production')
   const env = loadEnv(mode, process.cwd())
+  console.log('env', env)
 
   return {
     plugins: [react(), tailwindcss()],

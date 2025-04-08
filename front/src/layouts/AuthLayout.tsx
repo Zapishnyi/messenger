@@ -6,7 +6,7 @@ import { setNavigate } from '../helpers/navigate-to'
 import { storage } from '../services/localStorage.service'
 
 const AuthLayout: FC = () => {
-  console.log('.')
+  // console.log('.')
   const navigate = useNavigate()
   setNavigate(navigate)
 

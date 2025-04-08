@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 const HeaderAuth = () => {
-  console.log('.')
+  // console.log('.')
   const navigate = useNavigate()
   const location = useLocation()
 

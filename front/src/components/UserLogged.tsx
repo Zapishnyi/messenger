@@ -2,6 +2,7 @@ import { FC, memo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { errorHandle } from '../helpers/error-handle'
+import { MessageActions } from '../redux/Slices/messageSlice'
 import { UsersActions } from '../redux/Slices/usersSlice'
 import { useAppDispatch, useAppSelector } from '../redux/store'
 import { storage } from '../services/localStorage.service'
@@ -11,7 +12,7 @@ interface IProps {
   nick_name: string
 }
 const UserLogged: FC<IProps> = memo(({ nick_name }) => {
-  console.log('.')
+  // console.log('.')
   const { me_online } = useAppSelector((state) => state.online)
   const [hover, setHover] = useState<boolean>(false)
   const navigate = useNavigate()
@@ -22,6 +23,7 @@ const UserLogged: FC<IProps> = memo(({ nick_name }) => {
       storage.deleteTokens()
       dispatch(UsersActions.setLoggedUser(null))
       dispatch(UsersActions.setContactChosen(null))
+      dispatch(MessageActions.clearMessages())
       navigate('/auth/sign-in')
     } catch (e) {
       errorHandle(e)

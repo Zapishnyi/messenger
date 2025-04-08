@@ -13,7 +13,7 @@ import { storage } from '../services/localStorage.service'
 
 export const SocketContext = createContext<Socket | null>(null)
 const MainLayout: FC = () => {
-  console.log('.')
+  // console.log('.')
   const { userLogged } = useAppSelector((state) => state.users)
   const token = storage.getAccessToken()
   const socket = useSocket(token || null)

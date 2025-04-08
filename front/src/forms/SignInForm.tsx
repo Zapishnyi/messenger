@@ -9,7 +9,7 @@ import { InputFieldTypeEnum } from '../enums/InputFieldTtypeEnum'
 import { errorHandle } from '../helpers/error-handle'
 import IUserSignIn from '../interfaces/IUserSignIn'
 import { UsersActions } from '../redux/Slices/usersSlice'
-import { useAppDispatch, useAppSelector } from '../redux/store'
+import { useAppDispatch } from '../redux/store'
 import { storage } from '../services/localStorage.service'
 import { api } from '../services/messenger.api.service'
 
@@ -20,7 +20,6 @@ const SignInForm = () => {
   const dispatch = useAppDispatch()
 
   const [isPending, setIsPending] = useState(false)
-  const { userLogged } = useAppSelector((state) => state.users)
   const SubmitHandler = async (credentials: IUserSignIn) => {
     setIsPending(true)
     try {

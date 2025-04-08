@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const User: FC<IProps> = memo(({ online, nick_name, isInContacts, action }) => {
-  console.log('.')
+  // console.log('.')
   return (
     <div className="flex grow-1 items-start gap-[10px]" onClick={action}>
       <div className="relative">

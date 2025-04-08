@@ -5,7 +5,7 @@ import { HelpersActions } from '../redux/Slices/helpersSlice'
 import { useAppDispatch, useAppSelector } from '../redux/store'
 
 const Users: FC = () => {
-  console.log('.')
+  // console.log('.')
   const dispatch = useAppDispatch()
   const { users, userLogged } = useAppSelector((state) => state.users)
 

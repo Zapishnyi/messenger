@@ -6,7 +6,7 @@ import User from './User'
 import UserLogged from './UserLogged'
 
 const HeaderMain = memo(() => {
-  console.log('.')
+  // console.log('.')
   const { userLogged, contactChosen } = useAppSelector((state) => state.users)
   const { users_online } = useAppSelector((state) => state.online)
   const online = users_online.includes(contactChosen?.id || '')
