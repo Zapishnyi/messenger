@@ -43,7 +43,7 @@ const MainLayout: FC = () => {
           <div className={'flex h-[50px] w-full align-items-center p-[5px] gap-[5px] '}>
             <ContactSearchForm />
             <SvgBurgerRight
-              className={' w-[35px] sm:hidden '}
+              className={' w-[35px] cursor-pointer sm:hidden '}
               onClick={() => setIsSearchExpanded(!isSearchExpanded)}
             />
           </div>
