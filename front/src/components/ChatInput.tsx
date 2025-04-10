@@ -102,7 +102,9 @@ const ChatInput: FC = memo(() => {
     if (messageOnEdit) dispatch(MessageActions.setMessageOnEdit(null))
     if (!isInputEmpty[0]) isInputEmpty[1](true)
   }
-  const inputWatcher = () => {
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') sendMessageHandle()
     if (textInputRef.current?.value && isInputEmpty[0]) {
       isInputEmpty[1](false)
     } else if (!textInputRef.current?.value && !isInputEmpty[0]) {
@@ -115,7 +117,7 @@ const ChatInput: FC = memo(() => {
         className={`flex h-full w-full grow-1 px-[10px] 'bg-[#ffffff]'} focus:outline-none focus:ring-0
           focus:border-none`}
         disabled={!me_online || !contactChosen}
-        onChange={inputWatcher}
+        onKeyDown={handleKeyDown}
         ref={textInputRef}
         type="text"
         placeholder="Please type your message here..."
