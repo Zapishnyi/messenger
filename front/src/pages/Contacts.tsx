@@ -7,10 +7,9 @@ const Contacts: FC = () => {
   // console.log('.')
 
   const { userLoggedContacts, userLogged } = useAppSelector((state) => state.users)
-  console.log('userLoggedContacts', userLoggedContacts)
 
   return (
-    <div className={'h-full w-[300px] overflow-y-auto bg-[#e8e8e8]'}>
+    <div className={'h-full w-full overflow-y-auto bg-[#e8e8e8]'}>
       <p className={'text-center '}>Contacts</p>
       {!!userLoggedContacts?.length &&
         userLoggedContacts

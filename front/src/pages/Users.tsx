@@ -11,7 +11,7 @@ const Users: FC = () => {
 
   return (
     <div
-      className={'h-full w-[300px] overflow-y-auto bg-[#e8e8e8]'}
+      className={'h-full w-full overflow-y-auto bg-[#e8e8e8]'}
       onFocus={() => dispatch(HelpersActions.setUsersOnFocus(true))}
       onBlur={() => dispatch(HelpersActions.setUsersOnFocus(false))}
       tabIndex={-1}

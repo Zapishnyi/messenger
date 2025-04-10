@@ -7,7 +7,11 @@ import { SocketContext } from '../layouts/MainLayout'
 import { MessageActions } from '../redux/Slices/messageSlice'
 import { useAppDispatch, useAppSelector } from '../redux/store'
 import { api } from '../services/messenger.api.service'
-import SvgFile from './SvgComponents/SvgFile'
+import { SvgAttachment } from './SvgComponents/SvgAttachment'
+import { SvgAttachmentCheck } from './SvgComponents/SvgAttachmentChecked'
+import { SvgCheck } from './SvgComponents/SvgCheck'
+import SvgCross from './SvgComponents/SvgCross'
+import { SvgSend } from './SvgComponents/SvgSend'
 
 const ChatInput: FC = memo(() => {
   // console.log('.')
@@ -20,10 +24,10 @@ const ChatInput: FC = memo(() => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const textInputRef = useRef<HTMLInputElement>(null)
   const socket = useContext<Socket | null>(SocketContext)
+  const isInputEmpty = useState<boolean>(true)
 
   useEffect(() => {
-    if (textInputRef.current) textInputRef.current.value = ''
-    if (selectedFiles.length) setSelectedFiles([])
+    cancelHandle()
   }, [contactChosen])
 
   useEffect(() => {
@@ -39,9 +43,7 @@ const ChatInput: FC = memo(() => {
         filesToDelete,
         id: messageOnEdit.id,
       })
-      if (textInputRef.current) textInputRef.current.value = ''
-      dispatch(MessageActions.clearFilesToDelete())
-      dispatch(MessageActions.setMessageOnEdit(null))
+      cancelHandle()
     } else {
       try {
         let filesStore: IFile[] = []
@@ -65,23 +67,13 @@ const ChatInput: FC = memo(() => {
             files: filesStore,
             created: new Date().toString(),
           }
-          console.log(messageData)
+
           socket.emit('send_message', messageData)
-          if (textInputRef.current) textInputRef.current.value = ''
-          setSelectedFiles([])
+          cancelHandle()
         }
       } catch (e) {
         errorHandle(e)
       }
-    }
-  }
-  const attachFileHandle = () => {
-    if (messageOnEdit) {
-      dispatch(MessageActions.setMessageOnEdit(null))
-      dispatch(MessageActions.clearFilesToDelete())
-      if (textInputRef.current) textInputRef.current.value = ''
-    } else {
-      fileInputRef.current?.click()
     }
   }
 
@@ -102,39 +94,71 @@ const ChatInput: FC = memo(() => {
       e.target.value = ''
     }
   }
+
+  const cancelHandle = () => {
+    if (textInputRef.current?.value) textInputRef.current.value = ''
+    if (filesToDelete) dispatch(MessageActions.clearFilesToDelete())
+    if (selectedFiles.length) setSelectedFiles([])
+    if (messageOnEdit) dispatch(MessageActions.setMessageOnEdit(null))
+    if (!isInputEmpty[0]) isInputEmpty[1](true)
+  }
+  const inputWatcher = () => {
+    if (textInputRef.current?.value && isInputEmpty[0]) {
+      isInputEmpty[1](false)
+    } else if (!textInputRef.current?.value && !isInputEmpty[0]) {
+      isInputEmpty[1](true)
+    }
+  }
   return (
-    <div
-      className={
-        ' relative justify-content-end flex h-[50px] w-full gap-[5px] border border-gray-300'
-      }
-    >
+    <div className={' relative justify-content-end flex h-[50px] w-full border border-gray-300'}>
       <input
+        className={`flex h-full w-full grow-1 px-[10px] 'bg-[#ffffff]'} focus:outline-none focus:ring-0
+          focus:border-none`}
         disabled={!me_online || !contactChosen}
+        onChange={inputWatcher}
         ref={textInputRef}
         type="text"
         placeholder="Please type your message here..."
-        className="flex flex-grow-1 px-[5px]"
       />
 
       <input
         disabled={!me_online || !contactChosen}
         ref={fileInputRef}
         type="file"
-        className="hidden"
+        className={'hidden'}
         onChange={fileChangeHandle}
         multiple
       />
-      <div className={' h-full w-[100px] flex flex-grow-0'}>
-        <button
-          disabled={!me_online || !contactChosen}
-          onClick={attachFileHandle}
-          className={
-            'flex h-full w-full cursor-pointer items-center justify-center p-[5px] hover:bg-gray-100'
-          }
-        >
-          {!!selectedFiles.length && <SvgFile className="h-[20px]" />}
-          {messageOnEdit ? 'Cancel' : 'Attach'}
-        </button>
+
+      <div className={' h-full w-fit flex grow-0'}>
+        {me_online &&
+          contactChosen &&
+          (!isInputEmpty[0] || !!selectedFiles.length || messageOnEdit) && (
+            <button
+              className={`flex h-full w-[50px] cursor-pointer shrink-0 grow-0 items-center justify-center p-[5px]
+              hover:bg-gray-100 animate-fade-in`}
+              onClick={cancelHandle}
+            >
+              <SvgCross className="h-[20px]" />
+            </button>
+          )}
+
+        {!messageOnEdit && (
+          <button
+            disabled={!me_online || !contactChosen}
+            onClick={() => {
+              if (fileInputRef.current) fileInputRef.current.click()
+            }}
+            className={`flex h-full w-[50px] cursor-pointer shrink-0 grow-0 items-center justify-center p-[5px]
+            hover:bg-gray-100 animate-fade-in`}
+          >
+            {!!selectedFiles.length ? (
+              <SvgAttachmentCheck className="h-[30px]" />
+            ) : (
+              <SvgAttachment className="h-[30px]" />
+            )}
+          </button>
+        )}
         {fileTooLarge && (
           <p
             className={`absolute top-[-50px] right-[10px] z-10 flex h-[20px]] w-fit items-center text-wrap-none
@@ -149,10 +173,10 @@ const ChatInput: FC = memo(() => {
       <button
         disabled={!me_online || !contactChosen}
         onClick={sendMessageHandle}
-        className={`flex h-full w-[100px] flex-grow-0 cursor-pointer items-center justify-center p-[5px]
+        className={`flex h-full w-[50px] cursor-pointer shrink-0 grow-0 items-center justify-center p-[5px]
           hover:bg-gray-100`}
       >
-        {!messageOnEdit ? '  Send' : 'Confirm'}
+        {!messageOnEdit ? <SvgSend className="h-[30px]" /> : <SvgCheck className="h-[30px]" />}
       </button>
     </div>
   )

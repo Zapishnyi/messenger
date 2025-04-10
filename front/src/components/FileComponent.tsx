@@ -6,7 +6,7 @@ import IMessage from '../interfaces/IMessage'
 import { useAppSelector } from '../redux/store'
 import { api } from '../services/messenger.api.service'
 import Instruments from './Instruments'
-import SvgFile from './SvgComponents/SvgFile'
+import { SvgFile } from './SvgComponents/SvgFile'
 
 interface IProps {
   isOwned: boolean

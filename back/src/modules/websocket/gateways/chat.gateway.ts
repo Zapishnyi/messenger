@@ -25,6 +25,7 @@ import { AppConfigType } from '../../../configs/envConfigType';
 import { FileEntity } from '../../../database/entities/file.entity';
 import { MessageEntity } from '../../../database/entities/message.entity';
 import { MessageEditReqDto } from '../../message/dto/req/message-edit.req.dto';
+import { MessagePresenterService } from '../../message/services/message-presenter.service';
 import { MessageService } from '../../message/services/message.service';
 import { MessageEditDto } from '../dto/ws-message-edit.dto';
 import { MessageDto } from '../dto/ws-message.dto';
@@ -51,6 +52,7 @@ export class ChatGateWay
     private readonly entityManager: EntityManager,
     private readonly jwtWSConnectGuard: JwtWSConnectGuard,
     private readonly messageService: MessageService,
+    private readonly messagePresenter: MessagePresenterService,
   ) {
     this.port = this.configService.get<AppConfigType>('app')!.port;
   }
@@ -166,7 +168,9 @@ export class ChatGateWay
   @SubscribeMessage('edit_message')
   @UseFilters(new GlobalWSExceptionFilter())
   async handleEditMessage(@MessageBody() message: MessageEditReqDto) {
-    const messageEdited = await this.messageService.editMessage(message);
+    const messageEdited = this.messagePresenter.toResponseDtoFromEntity(
+      await this.messageService.editMessage(message),
+    );
 
     const receiverSocketId = this.onlineUsersReversed.get(
       messageEdited.receiver_id,

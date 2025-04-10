@@ -1,6 +1,8 @@
-const SvgMagnifyingGlassBtn = () => {
+import { SVGProps } from 'react'
+
+const SvgMagnifyingGlassBtn = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg viewBox="0 0 57.231 57.231" className={'w-[20px]'}>
+    <svg viewBox="0 0 57.231 57.231" {...props}>
       <g>
         <g>
           <path

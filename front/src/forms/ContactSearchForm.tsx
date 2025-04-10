@@ -25,7 +25,7 @@ const ContactSearchForm: FC = memo(() => {
     if (!location.pathname.includes('/users') && isInputOnFocus) {
       navigate('/users')
     }
-    console.log('isUsersOnFocus', isUsersOnFocus)
+
     // if (!isInputOnFocus || !isUsersOnFocus) {
     //   console.log('contacts')
     //   navigate('/contacts')
@@ -54,12 +54,12 @@ const ContactSearchForm: FC = memo(() => {
       onFocusCapture={handleFocus}
       onBlur={handleFocus}
       onKeyDown={handleKeyDown}
-      className={'w-full h-full relative p-[5px]'}
+      className={'w-full h-full relative '}
     >
       <input
         type="text"
         {...register('search')}
-        className={'w-full h-full border-1 px-[10px] rounded-2xl bg-[#ffffff] border-[#959595] '}
+        className={'w-full h-full border-1 border-[#959595] px-[10px] rounded-2xl bg-[#ffffff] '}
       />
       <div
         className={`absolute top-1/2 right-[12px] w-[20px] -translate-y-1/2 ${ location.pathname.includes('/users') &&
@@ -67,13 +67,9 @@ const ContactSearchForm: FC = memo(() => {
         onClick={toContacts}
       >
         {location.pathname.includes('/users') ? (
-          <div className={'animate-fade-in'}>
-            <SvgCross />
-          </div>
+          <SvgCross className={'animate-fade-in'} />
         ) : (
-          <div className={'animate-fade-in'}>
-            <SvgMagnifyingGlassBtn />
-          </div>
+          <SvgMagnifyingGlassBtn className={'animate-fade-in'} />
         )}
       </div>
     </form>
