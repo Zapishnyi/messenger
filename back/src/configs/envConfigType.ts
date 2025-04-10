@@ -9,6 +9,7 @@ export type EnvConfigType = {
 export type AppConfigType = {
   port: number;
   host: string;
+  cors_origin: string;
   cors_port: number;
 };
 

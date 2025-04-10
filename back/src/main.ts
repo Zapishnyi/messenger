@@ -11,8 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const appEnvConfig = app.get(ConfigService).get<AppConfigType>('app');
   app.enableCors({
-    origin: '*',
-    // origin: `http://${appEnvConfig?.host}:${appEnvConfig?.cors_port}`,
+    origin: appEnvConfig?.host,
     credentials: true, // If cookies or auth headers are needed
   });
   const swaggerConfig = new DocumentBuilder()
