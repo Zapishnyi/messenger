@@ -34,15 +34,21 @@ const Instruments: FC<IProps> = memo(({ edit, message, file_id }) => {
         rounded-full flex justify-evenly items-center text-[#000000] [&>*]:p-[5px] animate-fade-in`}
     >
       {edit && (
-        <div onClick={editHandle}>
-          <SvgEditPen />
-        </div>
+        <SvgEditPen
+          className={
+            'w-[20px] transform cursor-pointer transition-all duration-[0.3s] ease-in-out hover:scale-[1.2]'
+          }
+          onClick={editHandle}
+        />
       )}
 
       {!checked && (
-        <div onClick={deleteHandle}>
-          <SvgDelete />
-        </div>
+        <SvgDelete
+          className={
+            'w-[20px] transform cursor-pointer transition-all duration-[0.3s] ease-in-out hover:scale-[1.2]'
+          }
+          onClick={deleteHandle}
+        />
       )}
     </div>
   )

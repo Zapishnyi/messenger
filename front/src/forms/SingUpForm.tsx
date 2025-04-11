@@ -2,6 +2,7 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { SyncLoader } from 'react-spinners'
 
 import ErrorsContainer from '../components/ErrorsContainer/ErrorsContainer'
 import FormInput from '../components/FormInput'
@@ -27,8 +28,10 @@ const SingUpForm: FC = () => {
       nick_name: '',
     },
   })
+  const [isPending, setIsPending] = useState(false)
   const [errorMessage, setErrorMassage] = useState<string[] | null>(null)
   const formSubmit = async (formData: IUserSignUp) => {
+    setIsPending(true)
     try {
       await api.auth.sign_up(formData)
       navigate('/auth/sign-in')
@@ -36,6 +39,7 @@ const SingUpForm: FC = () => {
       setErrorMassage(errorHandle(e).message)
     } finally {
       storage.deleteTokens()
+      setIsPending(false)
     }
   }
 
@@ -86,6 +90,15 @@ const SingUpForm: FC = () => {
             hover:shadow-[0_5px_10px_2px_rgba(99,102,241,0.7)] hover:transition`}
         >
           Submit
+          {isPending && (
+            <SyncLoader
+              color={'#000303'}
+              className={`absolute top-1/2 left-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center
+              justify-center bg-inherit`}
+              loading={true}
+              size={8}
+            />
+          )}
         </button>
       </div>
 

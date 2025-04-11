@@ -13,9 +13,10 @@ interface IProps {
   fileData: IFile
   message: IMessage
 }
-const FileComponent: FC<IProps> = memo(({ fileData, isOwned, message }) => {
+const Attachment: FC<IProps> = memo(({ fileData, isOwned, message }) => {
   const downloadLinkRef = useRef<HTMLAnchorElement>(null)
   const { messageOnEdit } = useAppSelector((state) => state.messages)
+
   const fileDownloadHandle = async () => {
     try {
       const response = await api.message.file_download(fileData.file_id)
@@ -41,16 +42,16 @@ const FileComponent: FC<IProps> = memo(({ fileData, isOwned, message }) => {
         {isOwned ? (
           <>
             <p>{fileData.file_name}</p>
-            <SvgFile className="h-[20px]" />{' '}
+            <SvgFile className={'h-[20px]'} />
           </>
         ) : (
           <>
-            <SvgFile className="h-[20px]" />
+            <SvgFile className={'h-[20px]'} />
             <p>{fileData.file_name}</p>
           </>
         )}
       </button>
-      <a ref={downloadLinkRef} style={{ display: 'none' }}></a>
+      <a ref={downloadLinkRef} className={'hidden'}></a>
       {message?.id === messageOnEdit?.id && messageOnEdit && (
         <Instruments edit={false} message={message} file_id={fileData.file_id} />
       )}
@@ -58,4 +59,4 @@ const FileComponent: FC<IProps> = memo(({ fileData, isOwned, message }) => {
   )
 })
 
-export default FileComponent
+export default Attachment

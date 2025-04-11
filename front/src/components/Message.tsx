@@ -2,7 +2,7 @@ import { FC, memo, useEffect, useState } from 'react'
 
 import IMessage from '../interfaces/IMessage'
 import { useAppSelector } from '../redux/store'
-import FileComponent from './FileComponent'
+import Attachment from './Attachment'
 import Instruments from './Instruments'
 interface IProps {
   message: IMessage
@@ -39,7 +39,7 @@ const Message: FC<IProps> = memo(({ message }) => {
       </div>
       {message.files.length > 0 &&
         message.files.map((f, i) => (
-          <FileComponent key={i} isOwned={isOwned} fileData={f} message={message} />
+          <Attachment key={i} isOwned={isOwned} fileData={f} message={message} />
         ))}
     </div>
   )

@@ -1,13 +1,6 @@
-import { FC } from 'react'
-
-const SvgDelete: FC = () => {
+const SvgDelete = (props: React.SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      className={
-        'w-[20px] transform cursor-pointer transition-all duration-[0.3s] ease-in-out hover:scale-[1.2]'
-      }
-    >
+    <svg viewBox="0 0 24 24" {...props}>
       <path
         fill="currentColor"
         d="M16 9H8v10h8zm-.47 7.12l-1.41 1.41L12 15.41l-2.12 2.12l-1.41-1.41L10.59 14l-2.13-2.12l1.41-1.41L12 12.59l2.12-2.12l1.41 1.41L13.41 14z"

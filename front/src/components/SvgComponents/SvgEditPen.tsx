@@ -1,11 +1,6 @@
-function SvgEditPen() {
+function SvgEditPen(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg
-      viewBox="0 0 1024 1024"
-      className={
-        'w-[20px] transform cursor-pointer transition-all duration-[0.3s] ease-in-out hover:scale-[1.2]'
-      }
-    >
+    <svg viewBox="0 0 1024 1024" {...props}>
       <path
         fill="currentColor"
         fillOpacity=".15"

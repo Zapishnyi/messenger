@@ -24,7 +24,7 @@ const ChatInput: FC = memo(() => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const textInputRef = useRef<HTMLInputElement>(null)
   const socket = useContext<Socket | null>(SocketContext)
-  const isInputEmpty = useState<boolean>(true)
+  const [isInputEmpty, setIsInputEmpty] = useState<boolean>(true)
 
   useEffect(() => {
     cancelHandle()
@@ -100,15 +100,15 @@ const ChatInput: FC = memo(() => {
     if (filesToDelete) dispatch(MessageActions.clearFilesToDelete())
     if (selectedFiles.length) setSelectedFiles([])
     if (messageOnEdit) dispatch(MessageActions.setMessageOnEdit(null))
-    if (!isInputEmpty[0]) isInputEmpty[1](true)
+    if (!isInputEmpty) setIsInputEmpty(true)
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') sendMessageHandle()
-    if (textInputRef.current?.value && isInputEmpty[0]) {
-      isInputEmpty[1](false)
-    } else if (!textInputRef.current?.value && !isInputEmpty[0]) {
-      isInputEmpty[1](true)
+    if (textInputRef.current?.value && isInputEmpty) {
+      setIsInputEmpty(false)
+    } else if (!textInputRef.current?.value && !isInputEmpty) {
+      setIsInputEmpty(true)
     }
   }
   return (
@@ -135,7 +135,7 @@ const ChatInput: FC = memo(() => {
       <div className={' h-full w-fit flex grow-0'}>
         {me_online &&
           contactChosen &&
-          (!isInputEmpty[0] || !!selectedFiles.length || messageOnEdit) && (
+          (!isInputEmpty || !!selectedFiles.length || messageOnEdit) && (
             <button
               className={`flex h-full w-[50px] cursor-pointer shrink-0 grow-0 items-center justify-center p-[5px]
               hover:bg-gray-100 animate-fade-in`}
