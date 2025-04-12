@@ -36,7 +36,7 @@ const Instruments: FC<IProps> = memo(({ edit, message, file_id }) => {
       {edit && (
         <SvgEditPen
           className={
-            'w-[20px] transform cursor-pointer transition-all duration-[0.3s] ease-in-out hover:scale-[1.2]'
+            'w-[30px] transform cursor-pointer transition-all duration-[0.3s] ease-in-out hover:scale-[1.2]'
           }
           onClick={editHandle}
         />
@@ -45,7 +45,7 @@ const Instruments: FC<IProps> = memo(({ edit, message, file_id }) => {
       {!checked && (
         <SvgDelete
           className={
-            'w-[20px] transform cursor-pointer transition-all duration-[0.3s] ease-in-out hover:scale-[1.2]'
+            'w-[30px] transform cursor-pointer transition-all duration-[0.3s] ease-in-out hover:scale-[1.2]'
           }
           onClick={deleteHandle}
         />

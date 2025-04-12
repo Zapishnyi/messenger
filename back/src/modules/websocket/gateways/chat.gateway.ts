@@ -24,9 +24,11 @@ import { JwtWSConnectGuard } from '../../../common/guards/jwt-ws-access-connect-
 import { AppConfigType } from '../../../configs/envConfigType';
 import { FileEntity } from '../../../database/entities/file.entity';
 import { MessageEntity } from '../../../database/entities/message.entity';
+import { UserEntity } from '../../../database/entities/user.entity';
 import { MessageEditReqDto } from '../../message/dto/req/message-edit.req.dto';
 import { MessagePresenterService } from '../../message/services/message-presenter.service';
 import { MessageService } from '../../message/services/message.service';
+import { IsolationLevelService } from '../../transaction-isolation-level/isolation-level.service';
 import { MessageEditDto } from '../dto/ws-message-edit.dto';
 import { MessageDto } from '../dto/ws-message.dto';
 
@@ -35,7 +37,7 @@ import { MessageDto } from '../dto/ws-message.dto';
   cors: {
     origin: '*',
   },
-}) // Will use dynamic port from config
+})
 export class ChatGateWay
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -53,10 +55,12 @@ export class ChatGateWay
     private readonly jwtWSConnectGuard: JwtWSConnectGuard,
     private readonly messageService: MessageService,
     private readonly messagePresenter: MessagePresenterService,
+    private readonly isolationLevel: IsolationLevelService,
   ) {
     this.port = this.configService.get<AppConfigType>('app')!.port;
   }
 
+  // initialization message in log ---------------------------------------------------------
   afterInit() {
     Logger.log(`WebSocket server initialized on port ${this.port}`);
   }
@@ -65,6 +69,8 @@ export class ChatGateWay
     const onlineUserIds = Array.from(this.onlineUsers.values());
     this.server.emit('online-users', onlineUserIds);
   }
+
+  // user connect logic ---------------------------------------------------------
   async handleConnection(client: Socket) {
     const user_id = await this.jwtWSConnectGuard.check(client);
 
@@ -81,17 +87,26 @@ export class ChatGateWay
     }
     // Logger.log(`User ${user_id} connected (Socket: ${client.id})`);
   }
-
+  // user disconnect logic ---------------------------------------------------------
   async handleDisconnect(client: Socket) {
     const user_id = this.onlineUsers.get(client.id);
     if (user_id) {
       this.onlineUsers.delete(client.id);
       this.onlineUsersReversed.delete(user_id);
       this.emitOnlineUsers();
+      this.entityManager.transaction(
+        this.isolationLevel.set(),
+        async (em: EntityManager): Promise<void> => {
+          const userRepositoryEM = em.getRepository(UserEntity);
+          await userRepositoryEM.update(user_id, {
+            last_visit: new Date(),
+          });
+        },
+      );
     }
-    // Logger.log(`User ${user_id} disconnected (Socket: ${client.id})`);
   }
 
+  // send messenger listener ---------------------------------------------------------
   @UsePipes(
     new ValidationPipe({
       exceptionFactory: (errors) => new WsException(errors),
@@ -101,6 +116,7 @@ export class ChatGateWay
   @UseFilters(new GlobalWSExceptionFilter())
   async handleMessage(@MessageBody() message: MessageDto) {
     const message_id = await this.entityManager.transaction(
+      this.isolationLevel.set(),
       async (em: EntityManager): Promise<string> => {
         const messageRepositoryEM = em.getRepository(MessageEntity);
         const fileRepositoryEM = em.getRepository(FileEntity);
@@ -133,6 +149,7 @@ export class ChatGateWay
     return message;
   }
 
+  // delete message listener ---------------------------------------------------------
   @UsePipes(
     new ValidationPipe({
       exceptionFactory: (errors) => new WsException(errors),
@@ -159,7 +176,7 @@ export class ChatGateWay
 
     return message;
   }
-
+  // edit message listener ---------------------------------------------------------
   @UsePipes(
     new ValidationPipe({
       exceptionFactory: (errors) => new WsException(errors),

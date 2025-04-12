@@ -52,14 +52,14 @@ const getUsersByQuery = createAsyncThunk(
           ...state.users.users,
           ...users.map((e) => ({
             ...e,
-            last_visit: e.last_visit ? toUaTimeString(e.last_visit) : 'null',
+            last_visit: e.last_visit ? toUaTimeString(new Date(e.last_visit)) : null,
           })),
         ])
       } else {
         return thunkAPI.fulfillWithValue(
           users.map((e) => ({
             ...e,
-            last_visit: e.last_visit ? toUaTimeString(e.last_visit) : 'null',
+            last_visit: e.last_visit ? toUaTimeString(new Date(e.last_visit)) : null,
           })),
         )
       }
@@ -81,7 +81,7 @@ const getMe = createAsyncThunk('users/getMe', async (_, thunkAPI) => {
     }
     return thunkAPI.fulfillWithValue({
       ...me,
-      last_visit: me.last_visit ? toUaTimeString(me.last_visit) : 'null',
+      last_visit: me.last_visit ? toUaTimeString(new Date(me.last_visit)) : null,
     })
   } catch (e) {
     const error = errorHandle(e)
@@ -100,7 +100,7 @@ const contactToggle = createAsyncThunk('users/contactToggle', async (user_id: st
       : await api.user.add_contact(user_id)
     return thunkAPI.fulfillWithValue({
       ...me,
-      last_visit: me.last_visit ? toUaTimeString(me.last_visit) : 'null',
+      last_visit: me.last_visit ? toUaTimeString(new Date(me.last_visit)) : null,
     })
   } catch (e) {
     const error = errorHandle(e)
@@ -127,6 +127,16 @@ export const usersSlice = createSlice({
     },
     clearUsers: (state) => {
       state.users = []
+    },
+    lastVisitStateUpdate: (state, action: PayloadAction<string>) => {
+      state.users = state.users.map((user) =>
+        user.id === action.payload
+          ? {
+              ...user,
+              last_visit: toUaTimeString(new Date()),
+            }
+          : user,
+      )
     },
     setContactChosen: (state, action: PayloadAction<IContact | null>) => {
       state.contactChosen = action.payload

@@ -6,22 +6,34 @@ import IMessage from '../interfaces/IMessage'
 import IUser from '../interfaces/IUser'
 import { MessageActions } from '../redux/Slices/messageSlice'
 import { OnlineActions } from '../redux/Slices/onlineSlice'
-import { useAppDispatch, useAppSelector } from '../redux/store'
+import { UsersActions } from '../redux/Slices/usersSlice'
+import { useAppDispatch } from '../redux/store'
 
 const WS_SERVER_URL = import.meta.env.VITE_BACK_BASE_URL
 
-export const useSocket = (token: string | null): Socket | null => {
+export const useSocket = (
+  token: string | null,
+  contactChosen: IContact | null,
+  userLogged: IUser | null,
+  users: IUser[],
+  userLoggedContacts: IContact[],
+  users_online: string[],
+): Socket | null => {
   const socketRef = useRef<Socket | null>(null)
   const dispatch = useAppDispatch()
-  const { contactChosen, userLogged } = useAppSelector((state) => state.users)
-
-  const contactChosenRef = useRef<IContact>(contactChosen)
-  const userLoggedRef = useRef<IUser>(userLogged)
+  const contactChosenRef = useRef<IContact | null>(contactChosen)
+  const userLoggedRef = useRef<IUser | null>(userLogged)
+  const usersRef = useRef<IUser[]>(users)
+  const userLoggedContactsRef = useRef<IContact[]>(userLoggedContacts)
+  const usersOnlineRef = useRef<string[]>(users_online)
 
   useEffect(() => {
     contactChosenRef.current = contactChosen
     userLoggedRef.current = userLogged
-  }, [contactChosen, userLogged])
+    usersRef.current = users
+    userLoggedContactsRef.current = userLoggedContacts
+    usersOnlineRef.current = users_online
+  }, [contactChosen, userLogged, users, userLoggedContacts, users_online])
 
   useEffect(() => {
     if (!token) return
@@ -42,8 +54,23 @@ export const useSocket = (token: string | null): Socket | null => {
       dispatch(OnlineActions.setUsersOnline([]))
     })
 
-    socketRef.current.on('online-users', (users: string[]) => {
-      dispatch(OnlineActions.setUsersOnline(users))
+    socketRef.current.on('online-users', (usersOnline: string[]) => {
+      const usersFiltered = usersOnline.filter((onlineUser) => {
+        return (
+          usersRef.current.some((user) => user.id === onlineUser) ||
+          userLoggedContactsRef.current.some((user) => user.id === onlineUser)
+        )
+      })
+
+      if (usersFiltered.length < usersOnlineRef.current.length) {
+        const userDisconnected = usersOnlineRef.current.filter(
+          (user) => !usersFiltered.includes(user),
+        )
+        dispatch(UsersActions.lastVisitStateUpdate(userDisconnected[0]))
+      }
+      if (usersFiltered.length !== usersOnlineRef.current.length) {
+        dispatch(OnlineActions.setUsersOnline(usersFiltered))
+      }
     })
 
     socketRef.current.on('error', (error: { message: string }) => {
@@ -56,7 +83,7 @@ export const useSocket = (token: string | null): Socket | null => {
     socketRef.current.on('receive_message', (message: IMessage) => {
       if (
         contactChosenRef.current?.id === message.sender_id ||
-        userLoggedRef?.current?.id === message.sender_id
+        userLoggedRef.current?.id === message.sender_id
       ) {
         dispatch(MessageActions.addMessage(message))
       }
@@ -68,7 +95,7 @@ export const useSocket = (token: string | null): Socket | null => {
     socketRef.current.on('message_edited', (message: IMessage) => {
       if (
         contactChosenRef.current?.id === message.sender_id ||
-        userLoggedRef?.current?.id === message.sender_id
+        userLoggedRef.current?.id === message.sender_id
       ) {
         dispatch(MessageActions.editMessage(message))
       }
@@ -77,7 +104,7 @@ export const useSocket = (token: string | null): Socket | null => {
     socketRef.current.on('message_deleted', (message: IMessage) => {
       if (
         contactChosenRef.current?.id === message.sender_id ||
-        userLoggedRef?.current?.id === message.sender_id
+        userLoggedRef.current?.id === message.sender_id
       ) {
         dispatch(MessageActions.deleteMessage(message.id))
       }

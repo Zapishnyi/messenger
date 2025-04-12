@@ -15,10 +15,20 @@ import { storage } from '../services/localStorage.service'
 
 export const SocketContext = createContext<Socket | null>(null)
 const MainLayout: FC = () => {
-  // console.log('.')
-  const { userLogged } = useAppSelector((state) => state.users)
+  console.log('.')
+  const { userLogged, contactChosen, userLoggedContacts, users } = useAppSelector(
+    (state) => state.users,
+  )
+  const { users_online } = useAppSelector((state) => state.online)
   const token = storage.getAccessToken()
-  const socket = useSocket(token || null)
+  const socket = useSocket(
+    token || null,
+    contactChosen,
+    userLogged,
+    users,
+    userLoggedContacts,
+    users_online,
+  )
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const [isSearchExpanded, setIsSearchExpanded] = useState<boolean>(true)
