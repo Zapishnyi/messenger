@@ -1,9 +1,9 @@
 import { FC, memo, useContext, useState } from 'react'
 
 import IMessage from '../interfaces/IMessage'
-import { SocketContext } from '../layouts/MainLayout'
 import { MessageActions } from '../redux/Slices/messageSlice'
 import { useAppDispatch, useAppSelector } from '../redux/store'
+import { SocketContext } from './SocketProvider'
 import SvgDelete from './SvgComponents/SvgDelete'
 import SvgEditPen from './SvgComponents/SvgEditPen'
 interface IProps {

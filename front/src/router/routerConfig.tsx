@@ -1,5 +1,6 @@
 import { createHashRouter, Navigate } from 'react-router-dom'
 
+import SocketProvider from '../components/SocketProvider'
 import AuthLayout from '../layouts/AuthLayout'
 import MainLayout from '../layouts/MainLayout'
 import Contacts from '../pages/Contacts'
@@ -29,7 +30,11 @@ export const routerConfig = createHashRouter([
   },
   {
     path: '',
-    element: <MainLayout />,
+    element: (
+      <SocketProvider>
+        <MainLayout />
+      </SocketProvider>
+    ),
     children: [
       {
         path: 'contacts',
