@@ -15,7 +15,9 @@ const HeaderMain: FC<IProps> = memo(({ menuAction }) => {
   const contactChosenLastVisit = users.find((u) => u.id === contactChosen?.id)?.last_visit || ''
 
   return (
-    <header className={'flex h-[50px] w-full grow-1 bg-[#e8e8e8] justify-between items-center '}>
+    <header
+      className={'flex h-[50px] w-full grow-1 bg-[#e8e8e8] sm:fixed justify-between items-center '}
+    >
       <div className={'px-[15px] flex h-full w-fit items-center relative'}>
         {contactChosen && (
           <>
