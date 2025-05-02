@@ -1,0 +1,36 @@
+name: Deploy to Digital Ocean Droplet on Push
+
+on:
+  push:
+    branches:
+      - staging  # or 'master', 'staging', etc.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          port: 22
+          source: "."
+          target: "~/apps/myapp"
+
+      - name: SSH and run Docker Compose
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          port: 22
+          script: |
+            cd ~/apps/myapp
+            docker-compose down
+            docker-compose up -d --build
