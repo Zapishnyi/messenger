@@ -1,10 +1,10 @@
-name: Deploy to Digital Ocean Droplet on Push
+name: Deploy to Digital Ocean Droplet on staging push
 
 on:
   push:
     branches:
       - staging  # or 'master', 'staging', etc.
-    workflow_dispatch:    
+     
 
 jobs:
   deploy:
