@@ -2,6 +2,7 @@ services:
   backend:
     build:
       context: ./back
+      dockerfile: Dockerfile
     ports:
       - '5000:5000'
     env_file:
@@ -13,6 +14,7 @@ services:
   frontend:
     build:
       context: ./front
+      dockerfile: Dockerfile
     ports:
       - '3000:80'
     env_file:
