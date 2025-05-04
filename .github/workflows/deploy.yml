@@ -14,12 +14,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: Debug secret loaded
-        run: echo "${{ secrets.DROPLET_SSH_KEY }}" | head -n 5
+      - name: Debug secrets
+        run: |
+         echo "HOST=${{ secrets.HOST }}"
+         echo "USERNAME=${{ secrets.USERNAME }}"
+         echo "${{ secrets.DROPLET_SSH_KEY }}" | head -n 5
         
-      - name: Debugging Step
-        run: echo "GitHub Actions workflow is triggered!"
-
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.6
         with:
