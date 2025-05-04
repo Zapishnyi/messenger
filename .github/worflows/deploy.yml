@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - staging  # or 'master', 'staging', etc.
+    workflow_dispatch:    
 
 jobs:
   deploy:
@@ -12,6 +13,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+        
+      - name: Debugging Step
+        run: echo "GitHub Actions workflow is triggered!"
 
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.6
