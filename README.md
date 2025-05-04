@@ -5,7 +5,7 @@ Back end - developed in Nest, Front end - React
 Database - PostgresSQL
 
 Developed as per technical assignment.
-just for trigger
+just for fun.
 
 ### Running DEV mode
 
