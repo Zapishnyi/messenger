@@ -23,7 +23,7 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_KEY }}
           port: 22
           source: "."
-          target: "~/apps/myapp"
+          target: "~/apps"
 
       - name: SSH and run Docker Compose
         uses: appleboy/ssh-action@v0.1.6
@@ -33,6 +33,6 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_KEY }}
           port: 22
           script: |
-            cd ~/apps/myapp
+            cd ~/apps
             docker-compose down
             docker-compose up -d --build
