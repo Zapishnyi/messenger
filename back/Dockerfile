@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20-alpine as back_build
 
 WORKDIR /app
 
@@ -7,5 +7,5 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build_render
+RUN npm run build
 
