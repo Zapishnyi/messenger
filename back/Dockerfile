@@ -8,6 +8,4 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-RUN ls -la dist  # optional debug step
 
-CMD ["node", "-r", "dotenv/config", "dist/main.js"]
