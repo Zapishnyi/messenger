@@ -28,5 +28,5 @@ export default new DataSource({
     path.join(process.cwd(), 'src', 'database', 'migrations', '*.ts'),
   ],
   synchronize:
-    false /*Must be false to avoid automatic entity's synchronization with database */,
+    true /*Must be false to avoid automatic entity's synchronization with database */,
 });
