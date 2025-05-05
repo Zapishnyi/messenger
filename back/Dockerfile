@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+RUN npm run build -- --mode droplet
 
 CMD ["node", "dist/main.js"]
