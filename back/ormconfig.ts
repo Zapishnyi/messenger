@@ -28,5 +28,5 @@ export default new DataSource({
     path.join(process.cwd(), 'dist', 'database', 'migrations', '*.js'),
   ],
   synchronize:
-    true /*Must be false to avoid automatic entity's synchronization with database */,
+    false /*Must be false to avoid automatic entity's synchronization with database */,
 });
