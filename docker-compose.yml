@@ -6,7 +6,7 @@ services:
     ports:
       - '5000:5000'
     env_file:
-      - back/environments/local.env
+      - back/environments/droplet.env
     depends_on:
       - postgres
     restart: always
@@ -18,7 +18,7 @@ services:
     ports:
       - '3000:80'
     env_file:
-      - front/.env
+      - front/.env.droplet
     restart: always
 
   postgres:
@@ -26,7 +26,7 @@ services:
    image: postgres:16.1
    restart: always
    env_file:
-    - back/environments/docker.env
+    - back/environments/droplet.env
    volumes:
     - pgdata:/var/lib/postgresql/data
    ports:
