@@ -10,6 +10,7 @@ services:
     depends_on:
       - postgres
     restart: always
+    command: sh -c "npm run migration:run && npm run start:prod" 
 
   frontend:
     build:
