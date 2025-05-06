@@ -38,7 +38,6 @@ import { EnvConfigType, PostgresConfigType } from '../../configs/envConfigType';
             path.join(
               process.cwd(),
               'dist',
-              'src',
               'database',
               'entities',
               '*.entity.js',
@@ -47,14 +46,7 @@ import { EnvConfigType, PostgresConfigType } from '../../configs/envConfigType';
           migrationsRun:
             true /* automatically check and start migrations if there is any  */,
           migrations: [
-            path.join(
-              process.cwd(),
-              'dist',
-              'src',
-              'database',
-              'migrations',
-              '*.js',
-            ),
+            path.join(process.cwd(), 'dist', 'database', 'migrations', '*.js'),
           ],
           synchronize:
             false /*Must be false to avoid automatic entity's synchronisation with database */,

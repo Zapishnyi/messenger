@@ -15,14 +15,7 @@ dotenv.config({
 const { user, password, host, port, dbName } = getter().postgres;
 Logger.log('PAth----------------------------------------');
 Logger.log([
-  path.join(
-    process.cwd(),
-    'dist',
-    'src',
-    'database',
-    'entities',
-    '*.entity.js',
-  ),
+  path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
 ]);
 // create connection to postgres database using script in package.json
 export default new DataSource({
@@ -33,14 +26,7 @@ export default new DataSource({
   password,
   database: dbName,
   entities: [
-    path.join(
-      process.cwd(),
-      'dist',
-      'src',
-      'database',
-      'entities',
-      '*.entity.js',
-    ),
+    path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
   ],
   migrations: [
     path.join(process.cwd(), 'dist', 'src', 'database', 'migrations', '*.js'),
