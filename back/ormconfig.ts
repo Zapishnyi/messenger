@@ -22,10 +22,10 @@ export default new DataSource({
   password,
   database: dbName,
   entities: [
-    path.join(process.cwd(), 'src', 'database', 'entities', '*.entity.ts'),
+    path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
   ],
   migrations: [
-    path.join(process.cwd(), 'src', 'database', 'migrations', '*.ts'),
+    path.join(process.cwd(), 'dist', 'database', 'migrations', '*.js'),
   ],
   synchronize:
     false /*Must be false to avoid automatic entity's synchronization with database */,
