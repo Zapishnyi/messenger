@@ -11,8 +11,7 @@ services:
     depends_on:
       - postgres
     restart: always
-    command: sh -c "npm run migration:run && npm run start:droplet" 
-
+    command: sh -c "npm run build && npm run migration:run && npm run start:droplet"
   frontend:
     container_name: front
     build:
