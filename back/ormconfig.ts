@@ -13,6 +13,7 @@ dotenv.config({
 
 // take out data from postgres ENV
 const { user, password, host, port, dbName } = getter().postgres;
+Logger.log('PAth----------------------------------------');
 Logger.log(
   path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
 );
