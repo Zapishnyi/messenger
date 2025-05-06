@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm'; /* import of connection to database*/
 
-import getter from './src/configs/envConfiguration'; /* import configuration from ENV configuration*/
+import getter from './configs/envConfiguration'; /* import configuration from ENV configuration*/
 
 dotenv.config({
   // path: "./environments/local.env", //when back in system
