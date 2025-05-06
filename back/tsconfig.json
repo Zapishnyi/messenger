@@ -24,7 +24,6 @@
   },
   "exclude": [
     "node_modules",
-   
     "build",
     "coverage",
     "src/database/migrations/**/*"

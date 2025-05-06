@@ -14,9 +14,9 @@ dotenv.config({
 // take out data from postgres ENV
 const { user, password, host, port, dbName } = getter().postgres;
 Logger.log('PAth----------------------------------------');
-Logger.log(
+Logger.log([
   path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
-);
+]);
 // create connection to postgres database using script in package.json
 export default new DataSource({
   type: 'postgres',
