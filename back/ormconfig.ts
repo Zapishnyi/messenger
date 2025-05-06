@@ -33,4 +33,6 @@ export default new DataSource({
   ],
   synchronize:
     false /*Must be false to avoid automatic entity's synchronization with database */,
+  logging: ['query', 'error'],
+  logger: 'advanced-console', // option
 });
