@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm'; /* import of connection to database*/
 
-import getter from './src/configs/envConfiguration'; /* import configuration from ENV configuration*/
+import getter from './configs/envConfiguration'; /* import configuration from ENV configuration*/
 
 dotenv.config({
   // path: "./environments/local.env", //when back in system
@@ -26,10 +26,10 @@ export default new DataSource({
   password,
   database: dbName,
   entities: [
-    path.join(process.cwd(), 'src', 'database', 'entities', '*.entity.ts'),
+    path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
   ],
   migrations: [
-    path.join(process.cwd(), 'src', 'database', 'migrations', '*.ts'),
+    path.join(process.cwd(), 'dist', 'database', 'migrations', '*.js'),
   ],
   synchronize:
     false /*Must be false to avoid automatic entity's synchronization with database */,
