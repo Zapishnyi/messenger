@@ -26,10 +26,10 @@ export default new DataSource({
   password,
   database: dbName,
   entities: [
-    path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
+    path.join(process.cwd(), 'src', 'database', 'entities', '*.entity.ts'),
   ],
   migrations: [
-    path.join(process.cwd(), 'dist', 'database', 'migrations', '*.js'),
+    path.join(process.cwd(), 'src', 'database', 'migrations', '*.ts'),
   ],
   synchronize:
     false /*Must be false to avoid automatic entity's synchronization with database */,
