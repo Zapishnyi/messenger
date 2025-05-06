@@ -28,5 +28,5 @@
     "coverage",
     "src/database/migrations/**/*"
   ],
-  "include": ["src/**/*","../ormconfig.ts", "dist/**/*", "types/**/*", "types", "eslint-plugin-import.d.ts","eslint.config.mjs"]
+  "include": ["src/**/*","../ormconfig.ts", "dist/**/*", "types/**/*", "types", "eslint-plugin-import.d.ts","eslint.config.mjs", "ormconfig.ts"]
 }

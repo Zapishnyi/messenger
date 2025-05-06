@@ -4,7 +4,7 @@ import { Logger } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm'; /* import of connection to database*/
 
-import getter from './configs/envConfiguration'; /* import configuration from ENV configuration*/
+import getter from './src/configs/envConfiguration'; /* import configuration from ENV configuration*/
 
 dotenv.config({
   // path: "./environments/local.env", //when back in system
@@ -15,7 +15,14 @@ dotenv.config({
 const { user, password, host, port, dbName } = getter().postgres;
 Logger.log('PAth----------------------------------------');
 Logger.log([
-  path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
+  path.join(
+    process.cwd(),
+    'dist',
+    'src',
+    'database',
+    'entities',
+    '*.entity.js',
+  ),
 ]);
 // create connection to postgres database using script in package.json
 export default new DataSource({
@@ -26,10 +33,17 @@ export default new DataSource({
   password,
   database: dbName,
   entities: [
-    path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
+    path.join(
+      process.cwd(),
+      'dist',
+      'src',
+      'database',
+      'entities',
+      '*.entity.js',
+    ),
   ],
   migrations: [
-    path.join(process.cwd(), 'dist', 'database', 'migrations', '*.js'),
+    path.join(process.cwd(), 'dist', 'src', 'database', 'migrations', '*.js'),
   ],
   synchronize:
     false /*Must be false to avoid automatic entity's synchronization with database */,
