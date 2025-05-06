@@ -22,6 +22,8 @@ services:
       - '3000:80'
     env_file:
       - front/.env.droplet
+    depends_on:
+      - backend  
     restart: always
 
   postgres:
