@@ -46,6 +46,7 @@ export class GlobalHTTPExceptionFilter implements ExceptionFilter {
 
       case exception instanceof TypeORMError:
         Logger.log('Global exception filter TypeORMError: ');
+        Logger.log(exception);
         status = HttpStatus.INTERNAL_SERVER_ERROR;
         messages = [(exception as TypeORMError).message];
         break;
