@@ -1,6 +1,5 @@
 import * as path from 'node:path';
 
-import { Logger } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm'; /* import of connection to database*/
 
@@ -13,10 +12,6 @@ dotenv.config({
 
 // take out data from postgres ENV
 const { user, password, host, port, dbName } = getter().postgres;
-Logger.log('PAth----------------------------------------');
-Logger.log([
-  path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
-]);
 // create connection to postgres database using script in package.json
 export default new DataSource({
   type: 'postgres',

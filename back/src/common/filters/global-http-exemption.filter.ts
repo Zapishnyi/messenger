@@ -13,17 +13,18 @@ import { QueryFailedError, TypeORMError } from 'typeorm';
 
 @Catch()
 export class GlobalHTTPExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(GlobalHTTPExceptionFilter.name);
   catch(exception: HttpException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     let status: number;
     let messages: string[];
-    // Logger.log('original exception:', exception);
+    // this.logger.log('original exception:', exception);
     switch (true) {
       // validation
       case exception instanceof BadRequestException:
-        Logger.log('Global exception filter BadRequestException: ');
+        this.logger.log('Global exception filter BadRequestException: ');
         status = exception.getStatus();
         messages = (
           exception.getResponse() as {
@@ -33,48 +34,47 @@ export class GlobalHTTPExceptionFilter implements ExceptionFilter {
         break;
 
       case exception instanceof HttpException:
-        Logger.log('Global exception filter HttpException: ');
+        this.logger.log('Global exception filter HttpException: ');
         status = exception.getStatus();
         messages = [exception.message];
         break;
 
       case exception instanceof QueryFailedError:
-        Logger.log('Global exception filter QueryFailedError: ');
+        this.logger.log('Global exception filter QueryFailedError: ');
         status = HttpStatus.CONFLICT;
         messages = [(exception as QueryFailedError).message];
         break;
 
       case exception instanceof TypeORMError:
-        Logger.log('Global exception filter TypeORMError: ');
-        Logger.log(exception);
+        this.logger.log('Global exception filter TypeORMError: ');
         status = HttpStatus.INTERNAL_SERVER_ERROR;
         messages = [(exception as TypeORMError).message];
         break;
 
       case exception instanceof TokenExpiredError:
-        Logger.log('Global exception filter TokenExpiredError: ');
+        this.logger.log('Global exception filter TokenExpiredError: ');
         status = HttpStatus.UNAUTHORIZED;
         messages = [(exception as TokenExpiredError).message];
         break;
 
       case exception instanceof JsonWebTokenError:
-        Logger.log('Global exception filter JsonWebTokenError: ');
+        this.logger.log('Global exception filter JsonWebTokenError: ');
         status = HttpStatus.UNAUTHORIZED;
         messages = [(exception as JsonWebTokenError).message];
         break;
       case exception instanceof TokenExpiredError:
-        Logger.log('Global exception filter TokenExpiredError: ');
+        this.logger.log('Global exception filter TokenExpiredError: ');
         status = HttpStatus.UNAUTHORIZED;
         messages = [(exception as JsonWebTokenError).message];
         break;
       case exception instanceof TypeError:
-        Logger.log('Global exception filter TypeError: ');
+        this.logger.log('Global exception filter TypeError: ');
         status = HttpStatus.INTERNAL_SERVER_ERROR;
         messages = [(exception as TypeError).message];
         break;
 
       default:
-        Logger.log(
+        this.logger.log(
           `global http filter: Internal Server error:${(exception as Error).message} `,
         );
         status = HttpStatus.INTERNAL_SERVER_ERROR;
