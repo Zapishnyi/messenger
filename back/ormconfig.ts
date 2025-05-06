@@ -7,7 +7,7 @@ import getter from './src/configs/envConfiguration'; /* import configuration fro
 
 dotenv.config({
   // path: "./environments/local.env", //when back in system
-  path: './environments/docker.env', //when back in dicker
+  path: './environments/droplet.env', //when back in dicker
 }); /* loads environment variables from a .env file into process.env */
 
 // take out data from postgres ENV
