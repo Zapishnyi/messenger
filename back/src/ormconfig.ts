@@ -26,14 +26,7 @@ export default new DataSource({
   password,
   database: dbName,
   entities: [
-    path.join(__dirname, 'dist', 'database', 'entities', 'user.entity.js'),
-    path.join(
-      __dirname,
-      'dist',
-      'database',
-      'entities',
-      'auth-token.entity.js',
-    ),
+    path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
   ],
   migrations: [
     path.join(process.cwd(), 'dist', 'database', 'migrations', '*.js'),
