@@ -5,10 +5,6 @@ import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm'; /* import of connection to database*/
 
 import getter from './configs/envConfiguration'; /* import configuration from ENV configuration*/
-import { AuthTokenEntity } from './database/entities/auth-token.entity';
-import { FileEntity } from './database/entities/file.entity';
-import { MessageEntity } from './database/entities/message.entity';
-import { UserEntity } from './database/entities/user.entity';
 
 dotenv.config({
   // path: "./environments/local.env", //when back in system
@@ -29,7 +25,16 @@ export default new DataSource({
   username: user,
   password,
   database: dbName,
-  entities: [UserEntity, AuthTokenEntity, FileEntity, MessageEntity],
+  entities: [
+    path.join(__dirname, 'dist', 'database', 'entities', 'user.entity.js'),
+    path.join(
+      __dirname,
+      'dist',
+      'database',
+      'entities',
+      'auth-token.entity.js',
+    ),
+  ],
   migrations: [
     path.join(process.cwd(), 'dist', 'database', 'migrations', '*.js'),
   ],
