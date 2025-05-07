@@ -1,0 +1,31 @@
+services:
+  nest-app:
+    container_name: messenger
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - back/environments/local.env
+    ports:
+      - "${APP_PORT:-5000}:5000" # Map port 5000 of the container to port 5000 on the host HTTP and WS
+      # - "3001:3001" # MapWebsocket server port 3001 of the container to port 3001 on the host
+    volumes:
+      - ./back:/app_nest # Sync project directory to container
+      - /app_nest/node_modules # Ignore node_modules on the host
+    restart: on-failure
+    command: npm run start:local # Run the NestJS app
+
+  db-local-postgres:
+    container_name: postgres_container
+    image: postgres:16.1
+    env_file:
+      #  - back/environments/local.env # back in system
+      - back/environments/docker.env # back in docker
+    ports:
+      - "${POSTGRES_PORT:-5435}:5432"
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER:-user}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-password}"
+      POSTGRES_DB: "${POSTGRES_DB:-db-postgres-messenger}"
+    volumes:
+      - ./db-local-postgres:/var/lib/postgresql/db
