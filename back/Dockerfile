@@ -11,4 +11,4 @@ RUN npm run build \
   && echo "Contents of dist:" \
   && ls -al dist  # <--- See what’s inside the dist folder
 
-CMD ["npm", "run", "start:kubernetes"]
+CMD ["npm", "run", "start"]
