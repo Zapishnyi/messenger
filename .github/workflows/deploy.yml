@@ -39,8 +39,7 @@ jobs:
 
       - name: Create Kubernetes Secret for App, JWT, and Postgres
         run: |
-          kubectl create secret generic app-secrets \
-          --from-literal=APP_PORT=${{ secrets.KU_APP_PORT }} \
+          kubectl create secret generic app-secrets --from-literal=APP_PORT=${{ secrets.KU_APP_PORT }} \
           --from-literal=APP_HOST=${{ secrets.KU_APP_HOST }} \
           --from-literal=CORS_ORIGIN=${{ secrets.KU_CORS_ORIGIN }} \
           --from-literal=CORS_PORT=${{ secrets.KU_CORS_PORT }} \
