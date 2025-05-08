@@ -19,4 +19,17 @@ spec:
             - containerPort: 5000
           envFrom:
             - secretRef:
-                name: app-secrets  # The name of the Kubernetes secret you created
+                name: app-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nest-service
+spec:
+  selector:
+    app: nest-app
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80          # Public port exposed externally
+      targetPort: 5000  # Internal container port your app runs on
