@@ -54,9 +54,9 @@ jobs:
             --from-literal=POSTGRES_PASSWORD=${{ secrets.DO_POSTGRES_PASSWORD }} \
             --from-literal=POSTGRES_DB=${{ secrets.DO_POSTGRES_DB }} \
             --from-literal=POSTGRES_TRANSACTION_ISOLATION_LEVEL=${{ secrets.DO_POSTGRES_TRANSACTION_ISOLATION_LEVEL }} \
-            --dry-run=client -o yaml | kubectl apply -f - 
+        
 
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f deployment/nest-deployment.yaml
-          kubectl apply -f deployment/react-deployment.yaml
+         
