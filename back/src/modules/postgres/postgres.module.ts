@@ -50,6 +50,17 @@ import { EnvConfigType, PostgresConfigType } from '../../configs/envConfigType';
           ],
           synchronize:
             false /*Must be false to avoid automatic entity's synchronisation with database */,
+          ssl: true,
+          extra: {
+            // ✅ Pool settings passed to pg-pool
+            min: 2, // maintain at least 2 idle connections
+            max: 18, // limit total connections to avoid exceeding DB limit
+            idleTimeoutMillis: 30000, // close idle connections after 30s
+            connectionTimeoutMillis: 2000, // fail if no connection available in 2s
+            ssl: {
+              rejectUnauthorized: false, // required for DigitalOcean managed DB
+            },
+          },
         };
       },
       // allow to inject ConfigService from '@nestjs/config' and push ENV configuration

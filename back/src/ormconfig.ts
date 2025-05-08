@@ -24,7 +24,7 @@ export default new DataSource({
     path.join(process.cwd(), 'dist', 'database', 'entities', '*.entity.js'),
   ],
   migrations: [
-    path.join(process.cwd(), 'dist', 'src', 'database', 'migrations', '*.js'),
+    path.join(process.cwd(), 'dist', 'database', 'migrations', '*.js'),
   ],
   synchronize:
     false /*Must be false to avoid automatic entity's synchronization with database */,
