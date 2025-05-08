@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: nest-app
-          image: registry.digitalocean.com/messanger-registry/nest-app
+          image: registry.digitalocean.com/messenger-registry/nest-app
           ports:
             - containerPort: 3000
 ---
