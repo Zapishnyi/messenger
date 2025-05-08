@@ -24,7 +24,7 @@ jobs:
 
       - name: Build & Push NestJS image
         run: |
-          docker build -t registry.digitalocean.com/${{ secrets.DO_REGISTRY }}/nest-app ./backend
+          docker build -t registry.digitalocean.com/${{ secrets.DO_REGISTRY }}/nest-app ./back
           docker push registry.digitalocean.com/${{ secrets.DO_REGISTRY }}/nest-app
 
       - name: Set up kubectl
