@@ -39,20 +39,21 @@ jobs:
 
       - name: Create Kubernetes Secret for App, JWT, and Postgres
         run: |
-          kubectl create secret generic app-secrets --from-literal=APP_PORT=${{ secrets.KU_APP_PORT }} 
-          kubectl create secret generic app-secrets--from-literal=APP_HOST=${{ secrets.KU_APP_HOST }} 
-          kubectl create secret generic app-secrets--from-literal=CORS_ORIGIN=${{ secrets.KU_CORS_ORIGIN }} 
-          kubectl create secret generic app-secrets--from-literal=CORS_PORT=${{ secrets.KU_CORS_PORT }} 
-          kubectl create secret generic app-secrets--from-literal=JWT_ACCESS_SECRET=${{ secrets.KU_JWT_ACCESS_SECRET }} 
-          kubectl create secret generic app-secrets--from-literal=JWT_ACCESS_EXPIRE=${{ secrets.KU_JWT_ACCESS_EXPIRE }} 
-          kubectl create secret generic app-secrets--from-literal=JWT_REFRESH_SECRET=${{ secrets.KU_JWT_REFRESH_SECRET }} 
-          kubectl create secret generic app-secrets--from-literal=JWT_REFRESH_EXPIRE=${{ secrets.KU_JWT_REFRESH_EXPIRE }} 
-          kubectl create secret generic app-secrets--from-literal=POSTGRES_PORT=${{ secrets.DO_POSTGRES_PORT }} 
-          kubectl create secret generic app-secrets--from-literal=POSTGRES_HOST=${{ secrets.DO_POSTGRES_HOST }} 
-          kubectl create secret generic app-secrets--from-literal=POSTGRES_USER=${{ secrets.DO_POSTGRES_USER }} 
-          kubectl create secret generic app-secrets--from-literal=POSTGRES_PASSWORD=${{ secrets.DO_POSTGRES_PASSWORD }} 
-          kubectl create secret generic app-secrets--from-literal=POSTGRES_DB=${{ secrets.DO_POSTGRES_DB }} 
-          kubectl create secret generic app-secrets--from-literal=POSTGRES_TRANSACTION_ISOLATION_LEVEL=${{ secrets.DO_POSTGRES_TRANSACTION_ISOLATION_LEVEL }}
+         
+          kubectl create secret generic app-secrets --from-literal=APP_PORT=${{ secrets.KU_APP_PORT }} \
+          --from-literal=APP_HOST=${{ secrets.KU_APP_HOST }} \
+          --from-literal=CORS_ORIGIN=${{ secrets.KU_CORS_ORIGIN }} \
+          --from-literal=CORS_PORT=${{ secrets.KU_CORS_PORT }} \
+          --from-literal=JWT_ACCESS_SECRET=${{ secrets.KU_JWT_ACCESS_SECRET }} \
+          --from-literal=JWT_ACCESS_EXPIRE=${{ secrets.KU_JWT_ACCESS_EXPIRE }} \
+          --from-literal=JWT_REFRESH_SECRET=${{ secrets.KU_JWT_REFRESH_SECRET }} \
+          --from-literal=JWT_REFRESH_EXPIRE=${{ secrets.KU_JWT_REFRESH_EXPIRE }} \
+          --from-literal=POSTGRES_PORT=${{ secrets.DO_POSTGRES_PORT }} \
+          --from-literal=POSTGRES_HOST=${{ secrets.DO_POSTGRES_HOST }} \
+          --from-literal=POSTGRES_USER=${{ secrets.DO_POSTGRES_USER }} \
+          --from-literal=POSTGRES_PASSWORD=${{ secrets.DO_POSTGRES_PASSWORD }} \
+          --from-literal=POSTGRES_DB=${{ secrets.DO_POSTGRES_DB }} \
+          --from-literal=POSTGRES_TRANSACTION_ISOLATION_LEVEL=${{ secrets.DO_POSTGRES_TRANSACTION_ISOLATION_LEVEL }}
        
         
       - name: Deploy to Kubernetes
