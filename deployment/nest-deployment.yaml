@@ -16,7 +16,7 @@ spec:
         - name: nest-app
           image: registry.digitalocean.com/messenger-registry/nest-app
           ports:
-            - containerPort: 3000
+            - containerPort: 5000
           envFrom:
             - secretRef:
                 name: app-secrets  # The name of the Kubernetes secret you created
