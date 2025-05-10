@@ -49,27 +49,3 @@ spec:
       port: 443         # Public port for HTTPS
       targetPort: 5000  # Internal container port your app runs on
 
----
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: nest-app-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"  # Ensures HTTPS redirection
-spec:
-  rules:
-  - host: "129.212.140.191"  # Use your DigitalOcean LoadBalancer IP or domain
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: nest-service
-            port:
-              number: 80
-  tls:
-  - hosts:
-      - "129.212.140.191"   # Same IP or domain as the host above
-    secretName: ssl-cert-secret         
