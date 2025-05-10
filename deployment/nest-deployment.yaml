@@ -22,13 +22,14 @@ spec:
             - secretRef:
                 name: app-secrets
           volumeMounts:
-          - name: ssl-volume
-            mountPath: "/app/ssl"
-            readOnly: true
+            - name: ssl-volume
+              mountPath: "/app/ssl"
+              readOnly: true
       volumes:
         - name: ssl-volume
           secret:
-            secretName: ssl-secret      
+            secretName: ssl-secret   # Ensure SSL secret is correctly referenced
+
 ---
 apiVersion: v1
 kind: Service
@@ -39,11 +40,36 @@ spec:
     app: nest-app
   type: LoadBalancer
   ports:
-    - name: http-port   # Add the name field
+    - name: http-port   # HTTP port exposed externally (Port 80)
       protocol: TCP
-      port: 80          # Public port exposed externally
+      port: 80          # Public port exposed externally for HTTP
       targetPort: 5000  # Internal container port your app runs on
-    - name: ssl-port    # Add the name field for the second port (if applicable)
+    - name: ssl-port    # HTTPS port exposed externally (Port 443)
       protocol: TCP
-      port: 443         # Public port for SSL (adjust if needed)
+      port: 443         # Public port for HTTPS
       targetPort: 5000  # Internal container port your app runs on
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nest-app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"  # Ensures HTTPS redirection
+spec:
+  rules:
+  - host: "129.212.140.191"  # Use your DigitalOcean LoadBalancer IP or domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nest-service
+            port:
+              number: 80
+  tls:
+  - hosts:
+      - "129.212.140.191"   # Same IP or domain as the host above
+    secretName: ssl-cert-secret         
