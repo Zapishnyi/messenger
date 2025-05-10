@@ -26,11 +26,11 @@ import { FileEntity } from '../../../database/entities/file.entity';
 import { MessageEntity } from '../../../database/entities/message.entity';
 import { UserEntity } from '../../../database/entities/user.entity';
 import { MessageEditReqDto } from '../../message/dto/req/message-edit.req.dto';
-import { MessagePresenterService } from '../../message/services/message-presenter.service';
 import { MessageService } from '../../message/services/message.service';
+import { MessagePresenterService } from '../../message/services/message-presenter.service';
 import { IsolationLevelService } from '../../transaction-isolation-level/isolation-level.service';
-import { MessageEditDto } from '../dto/ws-message-edit.dto';
 import { MessageDto } from '../dto/ws-message.dto';
+import { MessageEditDto } from '../dto/ws-message-edit.dto';
 
 @Injectable()
 @WebSocketGateway({
