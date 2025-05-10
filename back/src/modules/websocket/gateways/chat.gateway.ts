@@ -41,6 +41,7 @@ import { MessageEditDto } from '../dto/ws-message-edit.dto';
 export class ChatGateWay
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  private readonly logger = new Logger(ChatGateWay.name);
   private readonly port: number;
 
   @WebSocketServer()
@@ -62,7 +63,7 @@ export class ChatGateWay
 
   // initialization message in log ---------------------------------------------------------
   afterInit() {
-    Logger.log(`WebSocket server initialized on port ${this.port}`);
+    this.logger.log(`WebSocket server initialized on port ${this.port}`);
   }
 
   private emitOnlineUsers() {

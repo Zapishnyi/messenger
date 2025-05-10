@@ -21,6 +21,14 @@ spec:
           envFrom:
             - secretRef:
                 name: app-secrets
+          volumeMounts:
+          - name: ssl-volume
+            mountPath: "/app/ssl"
+            readOnly: true
+      volumes:
+        - name: ssl-volume
+          secret:
+          secretName: ssl-secret      
 ---
 apiVersion: v1
 kind: Service

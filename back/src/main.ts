@@ -10,8 +10,8 @@ import { AppModule } from './modules/app.module';
 
 async function bootstrap() {
   const httpsOptions = {
-    key: fs.readFileSync('ssl/key.pem'),
-    cert: fs.readFileSync('ssl/cert.pem'),
+    key: fs.readFileSync('/app/ssl/tls.key'),
+    cert: fs.readFileSync('/app/ssl/tls.crt'),
   };
   const app = await NestFactory.create(AppModule, {
     httpsOptions,
@@ -60,13 +60,13 @@ async function bootstrap() {
   // Start HTTP server
   await app.listen(appEnvConfig?.port || 5000, async () => {
     Logger.log(
-      `HTTP server started on: http://${appEnvConfig?.host}:${appEnvConfig?.port}`,
+      `HTTPS server started on: https://${appEnvConfig?.host}:${appEnvConfig?.port}`,
     );
     Logger.log(
-      `Websocket server started on: http://${appEnvConfig?.host}:${appEnvConfig?.port}`,
+      `Websocket server started on: https://${appEnvConfig?.host}:${appEnvConfig?.port}`,
     );
     Logger.log(
-      `Swagger is available on: http://${appEnvConfig?.host}:${appEnvConfig?.port}/api-docs`,
+      `Swagger is available on: https://${appEnvConfig?.host}:${appEnvConfig?.port}/api-docs`,
     );
   });
 }
