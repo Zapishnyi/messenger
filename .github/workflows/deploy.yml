@@ -70,7 +70,9 @@ jobs:
         
           rm tls.key tls.crt
               
+      - name: Delete existing Deployment (if any)
+        run: kubectl delete deployment nest-app --ignore-not-found
+  
       - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f deployment/nest-deployment.yaml
+        run: kubectl apply -f deployment/nest-deployment.yaml
          

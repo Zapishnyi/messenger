@@ -28,7 +28,7 @@ spec:
       volumes:
         - name: ssl-volume
           secret:
-          secretName: ssl-secret      
+            secretName: ssl-secret      
 ---
 apiVersion: v1
 kind: Service
