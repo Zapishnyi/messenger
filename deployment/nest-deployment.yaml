@@ -39,9 +39,11 @@ spec:
     app: nest-app
   type: LoadBalancer
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 5000
-    - protocol: TCP
-      port: 443   # Added port 443 for HTTPS
-      targetPort: 5000
+    - name: http-port   # Add the name field
+      protocol: TCP
+      port: 80          # Public port exposed externally
+      targetPort: 5000  # Internal container port your app runs on
+    - name: ssl-port    # Add the name field for the second port (if applicable)
+      protocol: TCP
+      port: 443         # Public port for SSL (adjust if needed)
+      targetPort: 5000  # Internal container port your app runs on
