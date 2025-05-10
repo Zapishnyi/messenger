@@ -3,17 +3,25 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as fs from 'fs';
 
 import { AppConfigType } from './configs/envConfigType';
 import { AppModule } from './modules/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const httpsOptions = {
+    key: fs.readFileSync('ssl/key.pem'),
+    cert: fs.readFileSync('ssl/cert.pem'),
+  };
+  const app = await NestFactory.create(AppModule, {
+    httpsOptions,
+  });
   const appEnvConfig = app.get(ConfigService).get<AppConfigType>('app');
   app.enableCors({
     origin: appEnvConfig?.cors_origin, // Allowed origin for CORS
     credentials: true, // If cookies or auth headers are needed
   });
+
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Messenger API')
     .setDescription('API for message exchange between registered users')
