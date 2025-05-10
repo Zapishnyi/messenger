@@ -40,5 +40,8 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 80          # Public port exposed externally
-      targetPort: 5000  # Internal container port your app runs on
+      port: 80
+      targetPort: 5000
+    - protocol: TCP
+      port: 443   # Added port 443 for HTTPS
+      targetPort: 5000
