@@ -21,7 +21,7 @@ spec:
           envFrom:
             - secretRef:
                 name: app-secrets
-   
+
 ---
 apiVersion: v1
 kind: Service
@@ -32,7 +32,7 @@ spec:
     app: nest-app
   type: ClusterIP
   ports:
-    - name: http-port   # HTTP port exposed externally (Port 80)
+    - name: http-port
       protocol: TCP
       port: 80          # Public port exposed externally for HTTP
       targetPort: 5000  # Internal container port your app runs on
@@ -51,8 +51,7 @@ spec:
     solvers:
       - http01:
           ingress:
-            class: nginx 
-
+            class: nginx  # This is the default class for Nginx Ingress Controller
 
 ---
 apiVersion: networking.k8s.io/v1
@@ -60,19 +59,18 @@ kind: Ingress
 metadata:
   name: nest-app-ingress
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/ingress.class: "nginx"  # Make sure nginx ingress is installed and used
     cert-manager.io/cluster-issuer: "letsencrypt-http"
-    nginx.ingress.kubernetes.io/websocket-services: "nest-service"  # Enable WebSocket support for nest-service
+    nginx.ingress.kubernetes.io/websocket-services: "nest-service"
 spec:
   tls:
     - hosts:
         - messenger-test.duckdns.org
-      secretName: messenger-test-cert  # Will be auto-created by cert-manager
+      secretName: messenger-test-cert  # The certificate will be created by cert-manager
   rules:
     - host: messenger-test.duckdns.org
       http:
         paths:
-          # Route for the ACME challenge to the ingress controller
           - path: /.well-known/acme-challenge/*
             pathType: Prefix
             backend:
@@ -80,11 +78,56 @@ spec:
                 name: ingress-nginx-controller
                 port:
                   number: 80
-          # Main application route (for your NestJS app)
-          - path: / 
+          - path: /
             pathType: Prefix
             backend:
               service:
                 name: nest-service
                 port:
                   number: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: challenge-service
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: challenge-server
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: challenge-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: challenge-server
+  template:
+    metadata:
+      labels:
+        app: challenge-server
+    spec:
+      containers:
+        - name: challenge-server
+          image: nginx:alpine
+          volumeMounts:
+            - name: challenge-volume
+              mountPath: /usr/share/nginx/html/.well-known/acme-challenge
+      volumes:
+        - name: challenge-volume
+          configMap:
+            name: acme-challenge-files
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: acme-challenge-files
+data:
+  "dmJudrgLFnKhmt-cFG7nKSjwxZIxg5kiU0annCFQ8A0": "L9NYCvshXPuZRvblbhwBrY_Ndga8g1e-IyOtJRkPKHE"
