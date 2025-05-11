@@ -76,7 +76,7 @@ export class GlobalHTTPExceptionFilter implements ExceptionFilter {
         status = HttpStatus.INTERNAL_SERVER_ERROR;
         messages = ['Internal server error'];
     }
-
+    this.logger.warn(messages);
     response.status(status).json({
       statusCode: status /*The status code of the error.*/,
       messages,
