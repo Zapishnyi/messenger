@@ -57,22 +57,8 @@ jobs:
             --from-literal=POSTGRES_TRANSACTION_ISOLATION_LEVEL="${{ secrets.DO_POSTGRES_TRANSACTION_ISOLATION_LEVEL }}" \
             --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: Create SSL Secret
-        shell: bash
-        run: |
-          echo "${{ secrets.SSL_KEY }}" | base64 -d > tls.key
-          echo "${{ secrets.SSL_CERT }}" | base64 -d > tls.crt
-        
-          kubectl create secret tls ssl-secret \
-          --cert=tls.crt \
-          --key=tls.key \
-          --dry-run=client -o yaml | kubectl apply -f -
-        
-          rm tls.key tls.crt
-              
       - name: Delete existing Deployment (if any)
         run: kubectl delete deployment nest-app --ignore-not-found
-  
+
       - name: Deploy to Kubernetes
         run: kubectl apply -f deployment/nest-deployment.yaml
-         
