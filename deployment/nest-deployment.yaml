@@ -54,6 +54,15 @@ spec:
     - host: messenger-test.duckdns.org
       http:
         paths:
+          # Route for the ACME challenge to the ingress controller
+          - path: /.well-known/acme-challenge/*
+            pathType: Prefix
+            backend:
+              service:
+                name: ingress-nginx-controller
+                port:
+                  number: 80
+          # Main application route
           - path: /
             pathType: Prefix
             backend:
