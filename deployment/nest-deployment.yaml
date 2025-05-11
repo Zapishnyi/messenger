@@ -45,6 +45,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: "letsencrypt-http"
+    nginx.ingress.kubernetes.io/websocket-services: "nest-service"  # Enable WebSocket support for nest-service
 spec:
   tls:
     - hosts:
@@ -62,8 +63,8 @@ spec:
                 name: ingress-nginx-controller
                 port:
                   number: 80
-          # Main application route
-          - path: /
+          # Main application route (for your NestJS app)
+          - path: / 
             pathType: Prefix
             backend:
               service:
