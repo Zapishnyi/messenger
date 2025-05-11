@@ -3,19 +3,19 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as fs from 'fs';
 
 import { AppConfigType } from './configs/envConfigType';
 import { AppModule } from './modules/app.module';
 
 async function bootstrap() {
-  const httpsOptions = {
-    key: fs.readFileSync('/app/ssl/tls.key'),
-    cert: fs.readFileSync('/app/ssl/tls.crt'),
-  };
-  const app = await NestFactory.create(AppModule, {
-    httpsOptions,
-  });
+  // const httpsOptions = {
+  //   key: fs.readFileSync('/app/ssl/tls.key'),
+  //   cert: fs.readFileSync('/app/ssl/tls.crt'),
+  // };
+  const app = await NestFactory.create(
+    AppModule,
+    //  {httpsOptions} for ssl if needed
+  );
   const appEnvConfig = app.get(ConfigService).get<AppConfigType>('app');
   app.enableCors({
     origin: appEnvConfig?.cors_origin, // Allowed origin for CORS
