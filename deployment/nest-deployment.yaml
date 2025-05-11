@@ -30,7 +30,7 @@ metadata:
 spec:
   selector:
     app: nest-app
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: http-port   # HTTP port exposed externally (Port 80)
       protocol: TCP
