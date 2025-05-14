@@ -12,6 +12,7 @@ spec:
       labels:
         app: nest-app
     spec:
+      serviceAccountName: cert-manager-webhook-duckdns
       containers:
         - name: nest-app
           image: registry.digitalocean.com/messenger-registry/nest-app:latest
@@ -80,8 +81,8 @@ metadata:
   namespace: default 
 data:
   api-token: YmVjYTY1MzUtOWY1YS00MDEyLTg5YzEtNWNjN2VjMjYyZTMz
+  
 ---
-
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
